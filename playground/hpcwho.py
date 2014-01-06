@@ -26,6 +26,7 @@ def get_who_list(hostname,port,username,password):
         print e
 
     who_list = stdout.read().split("\n")
+    ssh.close()
     user_dict_list=[]
     for a_line in who_list:
         #print "+++++"+a_line+"+++++"
