@@ -2,7 +2,26 @@
 
 <div class="container">
     <h2>业务系统监控</h2>
-    <p>监控</p>
+    <h3>磁盘空间监控</h3>
+    <p>{{ quota_result }}</p>
+    <table class="quota-table">
+        <thead>
+            <td>文件系统</td>
+            <td>类型</td>
+            <td>软限制百分比</td>
+            <td>硬限制百分比</td>
+        </thead>
+        {% for each_file_system in quota_result['file_systems']  %}
+        <tr>
+            <td>{{ each_file_system['file_system'] }}</td>
+            <td>{{ each_file_system['quota_type'] }}</td>
+            <td>{{ each_file_system['soft_quota'] }}%</td>
+            <td>{{ each_file_system['hard_quota'] }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
 
+{% set local_js_file_list = [url_for('static',filename="js/jquery.dataTables.min.js"),
+                             url_for('static',filename="js/work/work_system_monitor.js")] %}
 
 {% include 'footer.html' %}
