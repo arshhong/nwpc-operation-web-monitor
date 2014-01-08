@@ -3,5 +3,10 @@
  */
 
 $(document).ready(function() {
-	$('.quota-table').dataTable();
+	$('.quota-table').dataTable({
+        "bFilter": false,
+        "bInfo": false,
+        "bLengthChange": false,
+        "bPaginate": false
+    });
 } );
