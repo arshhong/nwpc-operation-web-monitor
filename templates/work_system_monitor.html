@@ -6,7 +6,7 @@
     <h2>业务系统监控</h2>
     <h3>磁盘空间监控</h3>
     <h4>wangdp用户</h4>
-    <div claa="row">
+    <div class="row">
         <div class="col-md-8">
             <table class="table quota-table">
                 <thead>
@@ -28,10 +28,17 @@
             </table>
         </div>
     </div>
-    <div class="row"></div>
+    <div class="row" id="gauge-container">
+{#        <div class="col-md-4" >#}
+{#            <div id="gauge"></div>#}
+{#        </div>#}
+    </div>
 
 {% set local_js_file_list = [url_for('static',filename="js/jquery.dataTables.min.js"),
                              url_for('static',filename="js/dataTables.bootstrap.js"),
+                             url_for('static',filename="js/highcharts.js"),
+                             url_for('static',filename="js/highcharts-more.js"),
+                             "http://code.highcharts.com/modules/exporting.js",
                              url_for('static',filename="js/work/work_system_monitor.js")] %}
 
 {% include 'footer.html' %}
