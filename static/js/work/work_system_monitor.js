@@ -1,17 +1,6 @@
 /**
  * For work_system_monitor.html
  */
-
-$(document).ready(function() {
-	$('.quota-table').dataTable({
-        "bFilter": false,
-        "bInfo": false,
-        "bLengthChange": false,
-        "bPaginate": false
-    });
-} );
-
-
 $(document).ready(function () {
     var quota_chart_func=function(node_id,title,percent){
         $(node_id).highcharts({
@@ -109,26 +98,49 @@ $(document).ready(function () {
 	    });
     };
 
-
     $.get("/api/system/quota",function(data,status){
-        console.log("Data: " + data + "\nStatus: " + status);
         var quota_list = jQuery.parseJSON(data);
-        var some_quota = quota_list['file_systems'][0];
-        var current_percent = some_quota['current_usage']/some_quota['soft_limit']*100;
-        current_percent = Number(current_percent.toFixed(2));
-        var title = quota_list['file_systems'][0]['file_system'];
-        var node_id = "gauge-0";
 
-        $('#gauge-container').append('<div class="col-md-4"><div id="'+node_id+'"></div></div>');
-        quota_chart_func("#"+node_id,title,current_percent);
+        var aaData = [];
 
-        some_quota = quota_list['file_systems'][1];
-        current_percent = some_quota['current_usage']/some_quota['soft_limit']*100;
-        current_percent = Number(current_percent.toFixed(2));
-        var title = quota_list['file_systems'][1]['file_system'];
-        var node_id = "gauge-1";
-        $('#gauge-container').append('<div class="col-md-4"><div id="'+node_id+'"></div></div>');
-        quota_chart_func("#"+node_id,title,current_percent);
+        for(var i=0;i<quota_list['file_systems'].length;i++)
+        {
+            var node_id = "gauge-"+ i.toString();
+            var each_file_system = quota_list['file_systems'][i];
+            var title = each_file_system['file_system'];
+            var current_soft_percent = each_file_system['current_usage']/
+                each_file_system['soft_limit']*100;
+            current_soft_percent = Number(current_soft_percent.toFixed(2));
+
+            var current_hard_percent = each_file_system['current_usage']/
+                each_file_system['hard_limit']*100;
+            current_hard_percent = Number(current_hard_percent.toFixed(2));
+
+            $('#gauge-container').append('<div class="col-md-4"><div id="'+node_id+'"></div></div>');
+            quota_chart_func("#"+node_id,title,current_soft_percent);
+
+
+            aaData.push([each_file_system['file_system'],
+                         each_file_system['quota_type'],
+                         current_soft_percent.toString()+"%",
+                         current_hard_percent.toString()+"%"
+            ]);
+        }
+
+        $('#quota-table-container').html('<table class="table quota-table" id="quota-table-no-1"></table>');
+        $('#quota-table-no-1').dataTable({
+            "aaData": aaData,
+            "aoColumns": [
+                { "sTitle": "文件系统" },
+                { "sTitle": "类型" },
+                { "sTitle": "软限制百分比", "sClass": "center" },
+                { "sTitle": "硬限制百分比", "sClass": "center" },
+            ],
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": false,
+            "bPaginate": false
+	    });
     });
 
 });

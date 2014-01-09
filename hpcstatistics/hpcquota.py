@@ -52,6 +52,9 @@ def get_cmquota_by_user(hostname,port,username,password):
             file_system_list.append(current_file_system)
 
     quota_result['file_systems'] = file_system_list
+    quota_result['user_name'] = username
+    quota_result['host'] = hostname
+    quota_result['port'] = port
     import json
     dump = json.dumps(quota_result)
     return dump

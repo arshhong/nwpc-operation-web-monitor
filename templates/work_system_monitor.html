@@ -7,31 +7,10 @@
     <h3>磁盘空间监控</h3>
     <h4>wangdp用户</h4>
     <div class="row">
-        <div class="col-md-8">
-            <table class="table quota-table">
-                <thead>
-                    <th>文件系统</th>
-                    <th>类型</th>
-                    <th>软限制百分比</th>
-                    <th>硬限制百分比</th>
-                </thead>
-                <tbody>
-                    {% for each_file_system in quota_result['file_systems']  %}
-                    <tr>
-                        <td>{{ each_file_system['file_system'] }}</td>
-                        <td>{{ each_file_system['quota_type'] }}</td>
-                        <td>{{ each_file_system['soft_quota'] }}%</td>
-                        <td>{{ each_file_system['hard_quota'] }}%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-md-8" id="quota-table-container">
         </div>
     </div>
     <div class="row" id="gauge-container">
-{#        <div class="col-md-4" >#}
-{#            <div id="gauge"></div>#}
-{#        </div>#}
     </div>
 
 {% set local_js_file_list = [url_for('static',filename="js/jquery.dataTables.min.js"),
