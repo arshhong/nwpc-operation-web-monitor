@@ -28,6 +28,15 @@ def work_index():
 def hello_world():
     return render_template('index.html')
 
+@app.route('/api/system/quota')
+def get_system_quota():
+    from hpcstatistics import hpcquota
+    hostname = '10.20.49.124'
+    port = 22
+    username = 'wangdp'
+    password = 'perilla'
+    return hpcquota.get_cmquota_by_user(hostname,port,username,password)
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
