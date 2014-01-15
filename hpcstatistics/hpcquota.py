@@ -2,6 +2,7 @@ import paramiko
 import re
 import string
 
+
 def get_cmquota_by_user(hostname,port,username,password):
     bin_path = '/cma/u/app/sys_bin/cmquota'
     bin_param = username
@@ -13,6 +14,7 @@ def get_cmquota_by_user(hostname,port,username,password):
         stdin, stdout, stderr = ssh.exec_command(ssh_command)
     except paramiko.SSHException, e:
         print e
+        return "{'error':'error'}"
 
     result_lines = stdout.read().split("\n")
     ssh.close()
