@@ -12,11 +12,16 @@
     <div class="row" id="gauge-container">
     </div>
 
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
 {% set local_js_file_list = [url_for('static',filename="js/jquery.dataTables.min.js"),
                              url_for('static',filename="js/dataTables.bootstrap.js"),
                              url_for('static',filename="js/highcharts.js"),
                              url_for('static',filename="js/highcharts-more.js"),
                              "http://code.highcharts.com/modules/exporting.js",
                              url_for('static',filename="js/work/work_system_real_time_monitor.js")] %}
+
+
+
 
 {% include 'footer.html' %}

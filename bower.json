@@ -1,0 +1,22 @@
+{
+  "name": "nwpc-operation-web-monitor",
+  "version": "0.0.0",
+  "authors": [
+    "perillaroc <perillaroc@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "d3": "~3.5.5",
+    "bootstrap": "~3.3.4",
+    "hightcharts": "~4.1.5",
+    "socket.io-client": "~0.9.6"
+  }
+}
