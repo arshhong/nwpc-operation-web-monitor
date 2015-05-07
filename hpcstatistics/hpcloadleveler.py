@@ -51,9 +51,7 @@ def get_llq(hostname, port, username, password):
     llq_summary['preempted'] = total_prog_result.group(5)
     llq_result['total'] = llq_summary
 
-    import json
-    dump = json.dumps(llq_result)
-    return dump
+    return llq_result
 
 if __name__ == "__main__":
     hostname = '10.20.49.124'
@@ -61,4 +59,5 @@ if __name__ == "__main__":
     username = 'wangdp'
     password = 'perilla'
 
-    print get_llq(hostname,port,username,password)
+    llq_info = get_llq(hostname,port,username,password)
+    print llq_info
