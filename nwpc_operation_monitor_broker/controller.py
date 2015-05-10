@@ -3,10 +3,6 @@ from nwpc_operation_monitor_broker import socketio, app
 from flask.ext.socketio import emit
 
 
-@socketio.on('connect', namespace='/test')
+@socketio.on('connect', namespace='/hpc')
 def test_connect():
-    emit('my response', {'data': 'Connected', 'count': 0})
-
-@socketio.on('my event', namespace='/test')
-def test_message(message):
-    emit('my response', {'data': message['data'], 'count': 2})
+    emit('connect_response', {'data': 'Connected', 'app': 'nwpc-operation-monitor-broker'})
