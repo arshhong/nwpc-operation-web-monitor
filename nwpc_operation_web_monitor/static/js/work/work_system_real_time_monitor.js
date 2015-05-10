@@ -7,7 +7,7 @@ $(document).ready(function () {
         console.log('I\'m connected!');
     });
     socket.on('send_llq_info', function(msg){
-        console.log(msg);
+        /*console.log(msg);*/
         var total = msg.in_queue;
         var waiting = msg.waiting;
         var held = msg.held;
