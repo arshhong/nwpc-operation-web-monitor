@@ -1,11 +1,15 @@
+# coding=utf-8
 import paramiko
 import re
 import string
 
 
-def get_llq(hostname, port, username, password):
+def get_llq(hostname, port, username, password, query_user=None):
     bin_path = 'llq'
-    bin_param = ''
+    if query_user is not None:
+        bin_param = '-u ' + query_user
+    else:
+        bin_param = ''
     try:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -21,6 +25,17 @@ def get_llq(hostname, port, username, password):
 
     llq_result = dict()
     llq_jobs = list()
+    llq_total = None
+    llq_result['jobs'] = llq_jobs
+    llq_result['host'] = hostname
+    llq_result['user'] = username
+    llq_result['port'] = port
+    llq_result['total'] = llq_total
+
+    if result_lines[0].startswith('llq: There is currently no job status to report.'):
+        # 没有作业
+        return llq_result
+
     for a_line in result_lines[2:-3]:
         records = a_line.split()
         a_job = dict()
@@ -33,11 +48,7 @@ def get_llq(hostname, port, username, password):
         a_job['running_on'] = records[7] if len(records)>=8 else ""
         llq_jobs.append(a_job)
         #print a_job
-
     llq_result['jobs'] = llq_jobs
-    llq_result['host'] = hostname
-    llq_result['user'] = username
-    llq_result['port'] = port
 
     total_pattern = "^(\d+) job step\(s\) in queue, (\d+) waiting, (\d+) pending, (\d+) running, (\d+) held, (\d+) preempted"
     total_prog = re.compile(total_pattern)
@@ -52,6 +63,7 @@ def get_llq(hostname, port, username, password):
     llq_result['total'] = llq_summary
 
     return llq_result
+
 
 if __name__ == "__main__":
     hostname = '10.20.49.124'
