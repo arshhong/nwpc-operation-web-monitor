@@ -41,7 +41,7 @@ def get_llq(hostname, port, username, password):
 
     total_pattern = "^(\d+) job step\(s\) in queue, (\d+) waiting, (\d+) pending, (\d+) running, (\d+) held, (\d+) preempted"
     total_prog = re.compile(total_pattern)
-    total_prog_result = total_prog.match(result_lines[-2]);
+    total_prog_result = total_prog.match(result_lines[-2])
     llq_summary = dict()
     llq_summary['in_queue'] = total_prog_result.group(1)
     llq_summary['waiting'] = total_prog_result.group(2)
