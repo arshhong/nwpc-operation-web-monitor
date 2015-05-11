@@ -99,6 +99,7 @@ $(document).ready(function () {
         $('#running_llq_job_number').html(running);
         $('#pending_llq_job_number').html(pending);
         $('#preempted_llq_job_number').html(preempted);
-
     });
+
+
 });
