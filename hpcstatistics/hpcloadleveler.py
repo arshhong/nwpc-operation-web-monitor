@@ -50,7 +50,10 @@ def get_llq(hostname, port, username, password, query_user=None):
         #print a_job
     llq_result['jobs'] = llq_jobs
 
-    total_pattern = "^(\d+) job step\(s\) in queue, (\d+) waiting, (\d+) pending, (\d+) running, (\d+) held, (\d+) preempted"
+    if query_user is None:
+        total_pattern = u"^(\d+) job step\(s\) in queue, (\d+) waiting, (\d+) pending, (\d+) running, (\d+) held, (\d+) preempted"
+    else:
+        total_pattern = u"^(\d+) job step\(s\) in query, (\d+) waiting, (\d+) pending, (\d+) running, (\d+) held, (\d+) preempted"
     total_prog = re.compile(total_pattern)
     total_prog_result = total_prog.match(result_lines[-2])
     llq_summary = dict()
@@ -65,11 +68,50 @@ def get_llq(hostname, port, username, password, query_user=None):
     return llq_result
 
 
+def get_job_detail_info(hostname, port, username, password, query_user=None):
+
+    llq_result = get_llq(hostname, port, username, password, query_user)
+
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname, port, username, password)
+    except paramiko.SSHException, e:
+        print e
+        return {'error': 'error'}
+
+    for job_item in llq_result['jobs']:
+        print 'get information for', job_item['id']
+        bin_path = 'llq'
+        bin_param = '-l {id}'.format(id=job_item['id'])
+        ssh_command = bin_path + ' ' + bin_param
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(ssh_command)
+        result_stdin_lines = ssh_stdout.read().split("\n")
+        result_stdin_lines = [i.strip() for i in result_stdin_lines]
+
+        if result_stdin_lines[0].startswith('llq: There is currently no job status to report.'):
+            # 没有该作业
+            job_item['detail'] = None
+            continue
+        else:
+            job_item['detail'] = dict()
+
+        for line in result_stdin_lines:
+            # 查找需要的信息
+            if line.startswith('Status'):
+                job_item['detail']['Status'] = line[8:]
+            if line.startswith('Cmd'):
+                job_item['detail']['Cmd'] = line[5:]
+
+    ssh.close()
+    return llq_result
+
+
 if __name__ == "__main__":
     hostname = '10.20.49.124'
     port = 22
     username = 'wangdp'
     password = 'perilla'
 
-    llq_info = get_llq(hostname,port,username,password)
+    llq_info = get_job_detail_info(hostname,port,username,password, 'nwp_qu')
     print llq_info
