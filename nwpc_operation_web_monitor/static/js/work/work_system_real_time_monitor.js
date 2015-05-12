@@ -101,5 +101,19 @@ $(document).ready(function () {
         $('#preempted_llq_job_number').html(preempted);
     });
 
+    socket.on("llq_detail_info", function(message){
+        console.log(message);
+    });
+
+    $("#user_llq_query_button").click(function(){
+        var message={
+            app:'npwc_operation_web_monitor',
+            data:{
+                query_user: 'nwp_qu'
+            }
+        };
+        socket.emit('llq_detail_info', message);
+    });
+
 
 });
