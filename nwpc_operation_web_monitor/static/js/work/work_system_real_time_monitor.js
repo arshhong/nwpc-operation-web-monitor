@@ -1,9 +1,12 @@
 /**
  * For work_system_real_time_monitor.html
  */
+
+
+var socket = io.connect('http://127.0.0.1:5101/hpc');
 $(document).ready(function () {
     var llq_type_chart_svg_attr = {
-        height: $('#llq_total_job_board').height(),
+        height:180, //$('#llq_total_job_board').height(),
         width: $('#llq_type_chart_board').width()
     };
     var llq_type_chart_label_width = 120;
@@ -70,12 +73,12 @@ $(document).ready(function () {
     }
 
 
-    var socket = io.connect('http://127.0.0.1:5101/hpc');
+
     socket.on('connect', function() {
         console.log('I\'m connected!');
     });
     socket.on('send_llq_info', function(msg){
-        /*console.log(msg);*/
+        console.log('send_llq_info in global');
         var total = parseInt(msg.in_queue);
         var waiting = parseInt(msg.waiting);
         var held = parseInt(msg.held);
@@ -93,7 +96,7 @@ $(document).ready(function () {
         ];
         update_llq_type_chart(llq_info);
 
-        $('#total_llq_job_number').html(total);
+        //$('#total_llq_job_number').html(total);
         $('#waiting_llq_job_number').html(waiting);
         $('#held_llq_job_number').html(held);
         $('#running_llq_job_number').html(running);
@@ -114,6 +117,39 @@ $(document).ready(function () {
         };
         socket.emit('llq_detail_info', message);
     });
-
-
 });
+
+
+var LoadlevelerTotalJobBoard = React.createClass({
+    getInitialState: function() {
+        return {total_job_number: 'Unknown'};
+    },
+    componentDidMount: function(){
+        var component = this;
+        socket.on('send_llq_info', function(msg){
+            console.log('send_llq_info in component');
+            var total = parseInt(msg.in_queue);
+            var waiting = parseInt(msg.waiting);
+            var held = parseInt(msg.held);
+            var running = parseInt(msg.running);
+            var pending = parseInt(msg.pending);
+            var preempted = parseInt(msg.preempted);
+            component.setState({
+                total_job_number: total
+            });
+        });
+    },
+    render: function(){
+        return (
+            <div className="loadlevelerTotalJobBoard">
+                <div id="total_llq_job_number">{this.state.total_job_number}</div>
+                <div className="main_board_subtitle">job step(s) in loadleveler queue</div>
+            </div>
+        )
+    }
+});
+
+React.render(
+    <LoadlevelerTotalJobBoard />,
+    document.getElementById('llq_total_job_board')
+);

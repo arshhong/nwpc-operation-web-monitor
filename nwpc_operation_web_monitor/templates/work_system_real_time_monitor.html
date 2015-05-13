@@ -19,8 +19,8 @@
     <h3>实时监控</h3>
     <div class="row">
         <div class="col-md-6 main_board" id="llq_total_job_board">
-            <div id="total_llq_job_number">Unknown</div>
-            <div class="main_board_subtitle">job step(s) in loadleveler queue</div>
+            <!--<div id="total_llq_job_number">Unknown</div>-->
+            <!--<div class="main_board_subtitle">job step(s) in loadleveler queue</div>-->
         </div>
 
         <div class="col-md-6" id="llq_type_list_board">
@@ -55,15 +55,9 @@
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
 
-{% set local_js_file_list = [url_for('static',filename="js/jquery.dataTables.min.js"),
-                             url_for('static',filename="js/dataTables.bootstrap.js"),
-                             url_for('static',filename="js/highcharts.js"),
-                             url_for('static',filename="js/highcharts-more.js"),
-                             "http://code.highcharts.com/modules/exporting.js",
-                             url_for('static',filename="js/d3/d3.js"),
-                             url_for('static',filename="js/work/work_system_real_time_monitor.js")] %}
-
-
-
+{% set local_js_file_list = [url_for('static',filename="js/d3/d3.js"),
+                             url_for('static', filename="js/react/JSXTransformer.js"),
+                             url_for('static', filename="js/react/react.js")] %}
+    <script type="text/jsx;harmony=true" src="{{ url_for('static', filename='js/work/work_system_real_time_monitor.js') }}"></script>
 
 {% include 'footer.html' %}
