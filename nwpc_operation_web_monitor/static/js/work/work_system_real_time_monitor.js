@@ -231,8 +231,24 @@ var UserJobQueryBox = React.createClass({
         } else {
             var llq_jobs= this.state.llq_detail_info.jobs;
             jobs_nodes = llq_jobs.map(function(job){
+                var job_id = job.id;
+                var job_status = job.st;
+                var job_cmd = '';
+                if(job.detail!=null) {
+                    if (job.detail.hasOwnProperty('Status')) {
+                        job_status = job.detail.Status
+                    }
+
+                    if (job.detail.hasOwnProperty('Cmd')) {
+                        job_cmd = job.detail.Cmd
+                    }
+                }
                 return (
-                <p> { job.id} {job.st}</p>
+                    <tr>
+                        <td>{ job_id }</td>
+                        <td>{ job_status }</td>
+                        <td>{ job_cmd }</td>
+                    </tr>
                 )
             });
         }
@@ -248,7 +264,11 @@ var UserJobQueryBox = React.createClass({
                     </form>
                 </div>
                 <div class="row">
-                    {jobs_nodes}
+                    <table className="table">
+                        <tbody>
+                            {jobs_nodes}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );
