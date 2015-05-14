@@ -236,11 +236,12 @@ var UserJobQueryBox = React.createClass({
                 var job_cmd = '';
                 if(job.detail!=null) {
                     if (job.detail.hasOwnProperty('Status')) {
-                        job_status = job.detail.Status
+                        job_status = job.detail.Status;
                     }
-
-                    if (job.detail.hasOwnProperty('Cmd')) {
-                        job_cmd = job.detail.Cmd
+                    if (job.detail.hasOwnProperty('Executable') && job.detail.Executable!=null) {
+                        job_cmd = job.detail.Executable;
+                    } else if (job.detail.hasOwnProperty('Cmd') && job.detail.Cmd!=null){
+                        job_cmd = job.detail.Cmd;
                     }
                 }
                 return (

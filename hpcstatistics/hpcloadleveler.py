@@ -96,13 +96,21 @@ def get_job_detail_info(hostname, port, username, password, query_user=None):
         else:
             job_item['detail'] = dict()
 
+        status = None
+        cmd = None
+        executable = None
+
         for line in result_stdin_lines:
             # 查找需要的信息
             if line.startswith('Status'):
-                job_item['detail']['Status'] = line[8:]
+                status = line[8:]
             if line.startswith('Cmd'):
-                job_item['detail']['Cmd'] = line[5:]
-
+                cmd = line[5:]
+            if line.startswith('Executable'):
+                executable = line[15:]
+        job_item['detail']['Status'] = status
+        job_item['detail']['Cmd'] = cmd
+        job_item['detail']['Executable'] = executable
     ssh.close()
     return llq_result
 
