@@ -5,20 +5,24 @@
 
 var socket = io.connect('http://127.0.0.1:5101/hpc');
 socket.on('connect', function() {
-        console.log('I\'m connected!');
-    });
-
-$(document).ready(function () {
-    $("#user_llq_query_button").click(function(){
-        var message={
-            app:'npwc_operation_web_monitor',
-            data:{
-                query_user: 'nwp_qu'
-            }
-        };
-        socket.emit('llq_detail_info', message);
-    });
+    console.log('I\'m connected!');
 });
+
+//$(document).ready(function () {
+//    $("#user_llq_query_button").click(function(){
+//        var message={
+//            app:'npwc_operation_web_monitor',
+//            data:{
+//                query_user: 'nwp_qu'
+//            }
+//        };
+//        socket.emit('llq_detail_info', message);
+//    });
+//
+//    socket.on('llq_detail_info', function(message){
+//        console.log(message);
+//    })
+//});
 
 
 var LoadlevelerTotalJobBoard = React.createClass({
@@ -204,6 +208,70 @@ var LoadlevelerTypeListBoard = React.createClass({
     }
 });
 
+
+
+var UserJobQueryBox = React.createClass({
+    getInitialState: function() {
+        return {
+            llq_detail_info: null
+        }
+    },
+    componentDidMount: function() {
+        var component = this;
+        socket.on('llq_detail_info', function(message){
+            console.log(message);
+            component.setState({
+                llq_detail_info: message.data.llq_detail_info
+            })
+        })
+    },
+    handleQueryClick: function(e){
+        e.preventDefault();
+        var query_user = React.findDOMNode(this.refs.query_user).value.trim();
+        if(!query_user){
+            query_user = "nwp_qu";
+        }
+
+        var message={
+            app:'npwc_operation_web_monitor',
+            data:{
+                query_user: query_user
+            }
+        };
+        socket.emit('llq_detail_info', message);
+
+    },
+    render: function() {
+        var jobs_nodes;
+        if( this.state.llq_detail_info == null){
+            jobs_nodes = '';
+        } else {
+            var llq_jobs= this.state.llq_detail_info.jobs;
+            jobs_nodes = llq_jobs.map(function(job){
+                return (
+                <p> { job.id} {job.st}</p>
+                )
+            });
+        }
+        return (
+            <div className="userJobQueryBox">
+                <div class="row">
+                    <form className="form-inline">
+                        <div className="form-group">
+                            <label>用户名</label>
+                            <input type="text" className="form-control" placeholder="nwp" ref="query_user" />
+                        </div>
+                        <button type="button" className="btn btn-default" onClick={this.handleQueryClick}>查询</button>
+                    </form>
+                </div>
+                <div class="row">
+                    {jobs_nodes}
+                </div>
+            </div>
+        );
+    }
+});
+
 React.render(
     <LoadlevelerTotalJobBoard />,
     document.getElementById('llq_total_job_board')
@@ -217,4 +285,9 @@ React.render(
 React.render(
     <LoadlevelerTypeListBoard />,
     document.getElementById('llq_type_list_board')
+);
+
+React.render(
+    <UserJobQueryBox />,
+    document.getElementById('user_job_query_container')
 );
