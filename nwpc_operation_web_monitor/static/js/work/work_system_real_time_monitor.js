@@ -4,110 +4,11 @@
 
 
 var socket = io.connect('http://127.0.0.1:5101/hpc');
-$(document).ready(function () {
-    var llq_type_chart_svg_attr = {
-        height:180, //$('#llq_total_job_board').height(),
-        width: $('#llq_type_chart_board').width()
-    };
-    var llq_type_chart_label_width = 120;
-    var margin = 10;
-    var llq_type_chart_attr = {
-        max_width: llq_type_chart_svg_attr.width - llq_type_chart_label_width - margin,
-        bar_height: 20,
-        bar_step: 30
-    };
-    var llq_type_chart_svg = d3.select('#llq_type_chart_board').append('svg')
-        .attr('id', 'llq_type_chart')
-        .attr('height', llq_type_chart_svg_attr.height)
-        .attr('width', llq_type_chart_svg_attr.width);
-    var llq_type_chart_bar_group = llq_type_chart_svg;
-    var llq_type_chart_label_group = llq_type_chart_svg;
-
-    var llq_info = [
-        {name: 'total', value: 0},
-        {name: 'waiting', value: 0},
-        {name: 'pending', value: 0},
-        {name: 'running', value: 0},
-        {name: 'held', value: 0},
-        {name: 'preempted', value: 0}
-    ];
-
-    var bar_chart_label_data = llq_type_chart_label_group.selectAll('.llq-type-label').data(llq_info);
-    var bar_chart_label_enter = bar_chart_label_data
-        .enter()
-        .append('text')
-        .attr('x', llq_type_chart_label_width - margin)
-        .attr('y', function(d,i){
-            return i*llq_type_chart_attr.bar_step + llq_type_chart_attr.bar_height;
-        })
-        .attr('text-anchor', 'end')
-        .style('font-size', llq_type_chart_attr.bar_height)
-        .text(function(d){ return d.name; });
-
-
-
-    function update_llq_type_chart(llq_message){
-        var max_number = d3.max(llq_message, function(d){ return d.value; });
-        var x_scale = d3.scale.linear().domain([0, max_number]).range([0, llq_type_chart_attr.max_width]);
-        var bar_chart_data = llq_type_chart_bar_group.selectAll('.llq-type-bar').data(llq_message);
-        var bar_chart_data_enter = bar_chart_data
-            .enter()
-            .append('rect')
-            .attr('class', 'llq-type-bar')
-            .attr('height', llq_type_chart_attr.bar_height)
-            .attr('width', function(d){
-                return x_scale(d.value);
-            })
-            .attr('x', llq_type_chart_label_width)
-            .attr('y', function(d,i){
-                return i*llq_type_chart_attr.bar_step;
-            })
-            .attr('fill', '#ddd');
-
-        var bar_chart_data_modify = bar_chart_data
-            .transition()
-            .duration(800)
-            .attr('width', function(d){
-                return x_scale(d.value);
-            });
-    }
-
-
-
-    socket.on('connect', function() {
+socket.on('connect', function() {
         console.log('I\'m connected!');
     });
-    socket.on('send_llq_info', function(msg){
-        console.log('send_llq_info in global');
-        var total = parseInt(msg.in_queue);
-        var waiting = parseInt(msg.waiting);
-        var held = parseInt(msg.held);
-        var running = parseInt(msg.running);
-        var pending = parseInt(msg.pending);
-        var preempted = parseInt(msg.preempted);
 
-        var llq_info = [
-            {name: 'total', value: total},
-            {name: 'waiting', value: waiting},
-            {name: 'pending', value: pending},
-            {name: 'running', value: running},
-            {name: 'held', value: held},
-            {name: 'preempted', value: preempted}
-        ];
-        update_llq_type_chart(llq_info);
-
-        //$('#total_llq_job_number').html(total);
-        $('#waiting_llq_job_number').html(waiting);
-        $('#held_llq_job_number').html(held);
-        $('#running_llq_job_number').html(running);
-        $('#pending_llq_job_number').html(pending);
-        $('#preempted_llq_job_number').html(preempted);
-    });
-
-    socket.on("llq_detail_info", function(message){
-        console.log(message);
-    });
-
+$(document).ready(function () {
     $("#user_llq_query_button").click(function(){
         var message={
             app:'npwc_operation_web_monitor',
@@ -127,7 +28,7 @@ var LoadlevelerTotalJobBoard = React.createClass({
     componentDidMount: function(){
         var component = this;
         socket.on('send_llq_info', function(msg){
-            console.log('send_llq_info in component');
+            //console.log('send_llq_info in component');
             var total = parseInt(msg.in_queue);
             var waiting = parseInt(msg.waiting);
             var held = parseInt(msg.held);
@@ -142,8 +43,162 @@ var LoadlevelerTotalJobBoard = React.createClass({
     render: function(){
         return (
             <div className="loadlevelerTotalJobBoard">
-                <div id="total_llq_job_number">{this.state.total_job_number}</div>
+                <div className="total_llq_job_number">{this.state.total_job_number}</div>
                 <div className="main_board_subtitle">job step(s) in loadleveler queue</div>
+            </div>
+        )
+    }
+});
+
+var LoadlevelerTypeChartBoard = React.createClass({
+    getInitialState: function() {
+        var component = this;
+        var llq_type_chart_svg_attr = {
+            height: 180,
+            width: 550
+        };
+        var llq_type_chart_label_width = 120;
+        var margin = 10;
+        var llq_type_chart_attr = {
+            max_width: llq_type_chart_svg_attr.width - llq_type_chart_label_width - margin,
+            bar_height: 20,
+            bar_step: 30
+        };
+        return {
+            llq_info: [
+                {name: 'total', value: 0},
+                {name: 'waiting', value: 0},
+                {name: 'pending', value: 0},
+                {name: 'running', value: 0},
+                {name: 'held', value: 0},
+                {name: 'preempted', value: 0}
+            ],
+            llq_type_chart_attr: llq_type_chart_attr,
+            llq_type_chart_label_width: llq_type_chart_label_width,
+            margin: margin,
+            llq_type_chart_svg_attr: llq_type_chart_svg_attr
+        }
+    },
+    componentDidMount: function(){
+        var component = this;
+
+        var llq_type_chart_svg = d3.select(this.getDOMNode())
+            .attr('id', 'llq_type_chart_2')
+            .attr('height', this.state.llq_type_chart_svg_attr.height)
+            .attr('width', this.state.llq_type_chart_svg_attr.width);
+        var llq_type_chart_bar_group = llq_type_chart_svg;
+        var llq_type_chart_label_group = llq_type_chart_svg;
+
+        var bar_chart_label_data = llq_type_chart_label_group.selectAll('.llq-type-label').data(this.state.llq_info);
+        var bar_chart_label_enter = bar_chart_label_data
+            .enter()
+            .append('text')
+            .attr('x', this.state.llq_type_chart_label_width - this.state.margin)
+            .attr('y', function(d,i){
+                return i*component.state.llq_type_chart_attr.bar_step + component.state.llq_type_chart_attr.bar_height;
+            })
+            .attr('text-anchor', 'end')
+            .style('font-size', this.state.llq_type_chart_attr.bar_height)
+            .text(function(d){ return d.name; });
+
+        socket.on('send_llq_info', function(msg){
+            var total = parseInt(msg.in_queue);
+            var waiting = parseInt(msg.waiting);
+            var held = parseInt(msg.held);
+            var running = parseInt(msg.running);
+            var pending = parseInt(msg.pending);
+            var preempted = parseInt(msg.preempted);
+
+            component.setState({
+                llq_info: [
+                    {name: 'total', value: total},
+                    {name: 'waiting', value: waiting},
+                    {name: 'pending', value: pending},
+                    {name: 'running', value: running},
+                    {name: 'held', value: held},
+                    {name: 'preempted', value: preempted}
+                ]
+            });
+        });
+
+    },
+    shouldComponentUpdate: function(nextProps, nextState){
+        var component = this;
+
+        var llq_type_chart_svg = d3.select(this.getDOMNode());
+        var llq_type_chart_bar_group = llq_type_chart_svg;
+        var llq_type_chart_label_group = llq_type_chart_svg;
+
+        var max_number = d3.max(nextState.llq_info, function(d){ return d.value; });
+        var x_scale = d3.scale.linear().domain([0, max_number]).range([0, this.state.llq_type_chart_attr.max_width]);
+        var bar_chart_data = llq_type_chart_bar_group.selectAll('.llq-type-bar').data(nextState.llq_info);
+        var bar_chart_data_enter = bar_chart_data
+            .enter()
+            .append('rect')
+            .attr('class', 'llq-type-bar')
+            .attr('height', this.state.llq_type_chart_attr.bar_height)
+            .attr('width', function(d){
+                return x_scale(d.value);
+            })
+            .attr('x', this.state.llq_type_chart_label_width)
+            .attr('y', function(d,i){
+                return i*component.state.llq_type_chart_attr.bar_step;
+            })
+            .attr('fill', '#ddd');
+
+        var bar_chart_data_modify = bar_chart_data
+            .transition()
+            .duration(800)
+            .attr('width', function(d){
+                return x_scale(d.value);
+            });
+        return false;
+    },
+    render: function(){
+        return (
+            <svg></svg>
+        )
+    }
+});
+
+var LoadlevelerTypeListBoard = React.createClass({
+    getInitialState: function() {
+        return {
+            total: 'unknown',
+            waiting: 'unknown',
+            pending: 'unknown',
+            running: 'unknown',
+            held: 'unknown',
+            preempted: 'unknown'
+        }
+    },
+    componentDidMount: function() {
+        var component = this;
+        socket.on('send_llq_info', function(msg) {
+            var total = parseInt(msg.in_queue);
+            var waiting = parseInt(msg.waiting);
+            var held = parseInt(msg.held);
+            var running = parseInt(msg.running);
+            var pending = parseInt(msg.pending);
+            var preempted = parseInt(msg.preempted);
+            component.setState({
+                total: total,
+                waiting: waiting,
+                pending: pending,
+                running: running,
+                held: held,
+                preempted: preempted
+            })
+        });
+    },
+    render: function() {
+        return (
+            <div className="loadlevelerTypeListBoard">
+                <p>Waiting:{this.state.waiting}</p>
+                <p>Pending:{this.state.pending}</p>
+                <p>Running:{this.state.running}</p>
+                <p>Held:{this.state.held}</p>
+                <p>Preempted:{this.state.preempted}</p>
             </div>
         )
     }
@@ -152,4 +207,14 @@ var LoadlevelerTotalJobBoard = React.createClass({
 React.render(
     <LoadlevelerTotalJobBoard />,
     document.getElementById('llq_total_job_board')
+);
+
+React.render(
+    <LoadlevelerTypeChartBoard />,
+    document.getElementById('llq_type_chart_board')
+);
+
+React.render(
+    <LoadlevelerTypeListBoard />,
+    document.getElementById('llq_type_list_board')
 );

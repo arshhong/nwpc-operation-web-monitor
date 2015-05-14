@@ -9,7 +9,7 @@
     .main_board .main_board_subtitle {
         font-size: 2em;
     }
-    #total_llq_job_number {
+    .total_llq_job_number {
         font-size: 8em;
     }
 </style>
@@ -18,24 +18,13 @@
     <h2>业务系统监控</h2>
     <h3>实时监控</h3>
     <div class="row">
-        <div class="col-md-6 main_board" id="llq_total_job_board">
-            <!--<div id="total_llq_job_number">Unknown</div>-->
-            <!--<div class="main_board_subtitle">job step(s) in loadleveler queue</div>-->
-        </div>
-
-        <div class="col-md-6" id="llq_type_list_board">
-            <p>Waiting:<span id="waiting_llq_job_number"></span></p>
-            <p>pending:<span id="pending_llq_job_number"></span></p>
-            <p>running:<span id="running_llq_job_number"></span></p>
-            <p>held:<span id="held_llq_job_number"></span></p>
-            <p>preempted:<span id="preempted_llq_job_number"></span></p>
-        </div>
+        <div class="col-md-6 main_board" id="llq_total_job_board"></div>
+        <div class="col-md-6" id="llq_type_list_board"></div>
     </div>
     <div class="row">
         <div class="col-md-6" id="llq_type_chart_board">
         </div>
     </div>
-
 
     <h3>用户作业查询</h3>
     <div class="row">
