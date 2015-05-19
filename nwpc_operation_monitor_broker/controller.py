@@ -1,8 +1,13 @@
 from nwpc_operation_monitor_broker import socketio, app
 from hpcstatistics import hpcloadleveler
 
-from flask import json, request, jsonify
+from flask import json, request, jsonify,render_template
 from flask.ext.socketio import emit
+
+
+@app.route('/')
+def get_index_page():
+    return render_template('index.html')
 
 
 @app.route('/api/v1/hpc/loadleveler/info', methods=['POST'])
