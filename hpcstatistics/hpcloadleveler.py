@@ -4,32 +4,20 @@ import re
 import string
 
 
-def get_llq(hostname, port, username, password, query_user=None):
+def get_llq_by_ssh(ssh_connection, query_user=None):
     bin_path = 'llq'
     if query_user is not None:
         bin_param = '-u ' + query_user
     else:
         bin_param = ''
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname, port, username, password)
-        ssh_command = bin_path + ' ' + bin_param
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(ssh_command)
-    except paramiko.SSHException, e:
-        print e
-        return "{'error':'error'}"
-
+    ssh_command = bin_path + ' ' + bin_param
+    ssh_stdin, ssh_stdout, ssh_stderr = ssh_connection.exec_command(ssh_command)
     result_lines = ssh_stdout.read().split("\n")
-    ssh.close()
 
     llq_result = dict()
     llq_jobs = list()
     llq_total = None
     llq_result['jobs'] = llq_jobs
-    llq_result['host'] = hostname
-    llq_result['user'] = username
-    llq_result['port'] = port
     llq_result['total'] = llq_total
 
     if result_lines[0].startswith('llq: There is currently no job status to report.'):
@@ -68,24 +56,29 @@ def get_llq(hostname, port, username, password, query_user=None):
     return llq_result
 
 
-def get_job_detail_info(hostname, port, username, password, query_user=None):
-
-    llq_result = get_llq(hostname, port, username, password, query_user)
-
+def get_llq(hostname, port, username, password, query_user=None):
     try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname, port, username, password)
+        ssh_connection = paramiko.SSHClient()
+        ssh_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh_connection.connect(hostname, port, username, password)
     except paramiko.SSHException, e:
         print e
-        return {'error': 'error'}
+        return {
+            'error': 'ssh-connection-error'
+        }
+    return get_llq_by_ssh(ssh_connection, query_user)
+
+
+def get_job_detail_info_by_ssh(ssh_connection, query_user=None):
+
+    llq_result = get_llq(ssh_connection, query_user)
 
     for job_item in llq_result['jobs']:
         print 'get information for', job_item['id']
         bin_path = 'llq'
         bin_param = '-l {id}'.format(id=job_item['id'])
         ssh_command = bin_path + ' ' + bin_param
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(ssh_command)
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh_connection.exec_command(ssh_command)
         result_stdin_lines = ssh_stdout.read().split("\n")
         result_stdin_lines = [i.strip() for i in result_stdin_lines]
 
@@ -111,8 +104,20 @@ def get_job_detail_info(hostname, port, username, password, query_user=None):
         job_item['detail']['Status'] = status
         job_item['detail']['Cmd'] = cmd
         job_item['detail']['Executable'] = executable
-    ssh.close()
     return llq_result
+
+
+def get_job_detail_info(hostname, port, username, password, query_user=None):
+    try:
+        ssh_connection = paramiko.SSHClient()
+        ssh_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh_connection.connect(hostname, port, username, password)
+    except paramiko.SSHException, e:
+        print e
+        return {
+            'error': 'ssh-connection-error'
+        }
+    return get_job_detail_info_by_ssh(ssh_connection, query_user)
 
 
 if __name__ == "__main__":
@@ -121,5 +126,11 @@ if __name__ == "__main__":
     username = 'wangdp'
     password = 'perilla'
 
-    llq_info = get_job_detail_info(hostname,port,username,password, 'nwp_qu')
-    print llq_info
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname, port, username, password)
+        llq_info = get_job_detail_info_by_ssh(ssh, 'nwp_qu')
+        print llq_info
+    except paramiko.SSHException, e:
+        print e
