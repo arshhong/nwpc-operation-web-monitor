@@ -71,7 +71,7 @@ def get_llq(hostname, port, username, password, query_user=None):
 
 def get_job_detail_info_by_ssh(ssh_connection, query_user=None):
 
-    llq_result = get_llq(ssh_connection, query_user)
+    llq_result = get_llq_by_ssh(ssh_connection, query_user)
 
     for job_item in llq_result['jobs']:
         print 'get information for', job_item['id']

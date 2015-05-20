@@ -44,6 +44,18 @@ def get_hpc_llq_detail_info():
     return jsonify(result)
 
 
+@app.route('/api/v1/hpc/sms/info', methods=['POST'])
+def get_sms_info():
+    r = request
+    hpc_sms_info_message = json.loads(request.form['message'])
+    print "Receive sms info"
+    socketio.emit('send_sms_info', hpc_sms_info_message, namespace='/hpc')
+    result = {
+        'status': 'ok'
+    }
+    return jsonify(result)
+
+
 @socketio.on('connect', namespace='/hpc')
 def test_connect():
     emit('connect_response', {'data': 'Connected', 'app': 'nwpc-operation-monitor-broker'})
