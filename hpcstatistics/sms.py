@@ -40,6 +40,18 @@ def ping_sms_server(sms_server, ssh_connection):
     return result
 
 
+def ping_sms_server_by_list(sms_server_list, ssh_connection):
+    ping_sms_result_list = []
+    for sms_server in sms_server_list:
+        ping_result = ping_sms_server(sms_server, ssh_connection)
+        current_result = {
+            'sms_server': sms_server,
+            'ping_result': ping_result
+        }
+        ping_sms_result_list.append(current_result)
+    return ping_sms_result_list
+
+
 def main():
     hostname = '10.20.49.124'
     port = 22
@@ -54,12 +66,46 @@ def main():
         print e
         return
 
-    sms_server = {
-        'sms_prog': '310066',
-        'sms_host': 'cma20n03'
-    }
+    sms_server_list = [
+        {
+            'sms_name': 'nwpc_op',
+            'sms_prog': '310066',
+            'sms_host': 'cma20n03'
+        },
+        {
+            'sms_name': 'nwpc_qu',
+            'sms_prog': '310067',
+            'sms_host': 'cma20n03'
+        },
+        {
+            'sms_name': 'nwpc_sp',
+            'sms_prog': '310068',
+            'sms_host': 'cma20n03'
+        },
+        {
+            'sms_name': 'nwpc_ex',
+            'sms_prog': '310069',
+            'sms_host': 'cma20n03'
+        },
+        {
+            'sms_name': 'nwpc_xp',
+            'sms_prog': '310070',
+            'sms_host': 'cma20n03'
+        },
+        {
+            'sms_name': 'eps_nwpc_qu',
+            'sms_prog': '310067',
+            'sms_host': 'cma18n03'
+        },
+        {
+            'sms_name': 'draw_ncl',
+            'sms_prog': '310080',
+            'sms_host': '10.20.49.91'
+        }
+    ]
+    print ping_sms_server_by_list(sms_server_list, ssh)
+    ssh.close()
 
-    print ping_sms_server(sms_server, ssh)
     return
 
 
