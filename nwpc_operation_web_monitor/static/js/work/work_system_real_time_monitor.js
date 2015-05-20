@@ -276,6 +276,57 @@ var UserJobQueryBox = React.createClass({
     }
 });
 
+
+var SmsServerStatusBoard = React.createClass({
+    getInitialState: function() {
+        return {
+            sms_server_info: null
+        }
+    },
+    componentDidMount: function() {
+        var component = this;
+        socket.on('send_sms_info', function(message){
+            // console.log(message);
+            component.setState({
+                sms_server_info: message
+            })
+        })
+    },
+    render : function(){
+        var sms_server_nodes = '';
+        if (this.state.sms_server_info) {
+            sms_server_nodes = this.state.sms_server_info.map(function (server_info) {
+                var sms_server_name = server_info.sms_server.sms_name;
+                var sms_server_status;
+                var sms_server_label_class;
+                if (server_info.ping_result.hasOwnProperty('error')) {
+                    sms_server_status = 'Error';
+                    sms_server_label_class = 'label label-danger';
+                } else {
+                    sms_server_status = 'Ok';
+                    sms_server_label_class = 'label label-success';
+                }
+                return (
+                    <tr>
+                        <td>{sms_server_name}</td>
+                        <td><span className={sms_server_label_class} >{sms_server_status}</span></td>
+                    </tr>
+                )
+            });
+        }
+
+        return (
+            <div className="smsServerStatusBoard">
+                <table className="table">
+                    <tbody>
+                        {sms_server_nodes}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+});
+
 React.render(
     <LoadlevelerTotalJobBoard />,
     document.getElementById('llq_total_job_board')
@@ -294,4 +345,9 @@ React.render(
 React.render(
     <UserJobQueryBox />,
     document.getElementById('user_job_query_container')
+);
+
+React.render(
+    <SmsServerStatusBoard />,
+    document.getElementById('sms_server_status_container')
 );
