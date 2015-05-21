@@ -223,6 +223,152 @@ var LoadlevelerUserJobCountListBoard = React.createClass({
 
 
 
+var SmsServerStatusBoard = React.createClass({
+    getInitialState: function() {
+        return {
+            sms_server_info: null
+        }
+    },
+    componentDidMount: function() {
+        var component = this;
+        socket.on('send_sms_info', function(message){
+            // console.log(message);
+            component.setState({
+                sms_server_info: message
+            })
+        })
+    },
+    render : function(){
+        var sms_server_nodes = '';
+        if (this.state.sms_server_info) {
+            sms_server_nodes = this.state.sms_server_info.map(function (server_info) {
+                var sms_server_name = server_info.sms_server.sms_name;
+                var sms_server_status;
+                var sms_server_label_class;
+                if (server_info.ping_result.hasOwnProperty('error')) {
+                    sms_server_status = 'Error';
+                    sms_server_label_class = 'label label-danger';
+                } else {
+                    sms_server_status = 'Ok';
+                    sms_server_label_class = 'label label-success';
+                }
+                return (
+                    <tr>
+                        <td>{sms_server_name}</td>
+                        <td><span className={sms_server_label_class} >{sms_server_status}</span></td>
+                    </tr>
+                )
+            });
+        }
+
+        return (
+            <div className="smsServerStatusBoard">
+                <table className="table">
+                    <tbody>
+                        {sms_server_nodes}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+});
+
+
+var UserDiskUsageQueryBox = React.createClass({
+    getInitialState: function() {
+        return {
+            user_disk_usage: null
+        }
+    },
+    componentDidMount: function() {
+        var component = this;
+        socket.on('user_disk_usage', function(message){
+            if(message.hasOwnProperty('error')){
+                console.log(message.error_msg);
+                return;
+            }
+            component.setState({
+                user_disk_usage: message.data.user_disk_usage
+            })
+        })
+    },
+    handleQueryClick: function(e){
+        e.preventDefault();
+        var query_user = React.findDOMNode(this.refs.query_user).value.trim();
+        var query_password = React.findDOMNode(this.refs.query_password).value;
+        if(!query_user){
+            query_user = "nwp_qu";
+        }
+
+        var message={
+            app:'npwc_operation_web_monitor',
+            data:{
+                query_user: query_user,
+                query_password: query_password
+            }
+        };
+        socket.emit('user_disk_usage', message);
+
+    },
+    render: function() {
+        var disk_usage_nodes;
+        if( this.state.user_disk_usage == null){
+            disk_usage_nodes = '';
+        } else {
+            var disk_usage= this.state.user_disk_usage;
+            console.log(disk_usage);
+            disk_usage_nodes = disk_usage.file_systems.map(function(file_system){
+                var current_soft_percent = file_system['current_usage']/
+                    file_system['soft_limit']*100;
+                current_soft_percent = Number(current_soft_percent.toFixed(2));
+
+                var current_hard_percent = file_system['current_usage']/
+                    file_system['hard_limit']*100;
+                current_hard_percent = Number(current_hard_percent.toFixed(2));
+                return (
+                    <tr>
+                        <td>{file_system.file_system}</td>
+                        <td>{file_system.quota_type}</td>
+                        <td>{current_soft_percent}%</td>
+                        <td>{current_hard_percent}%</td>
+                    </tr>
+                );
+            });
+        }
+        return (
+            <div className="userDiskUsageQueryBox">
+                <div class="row">
+                    <form className="form-inline">
+                        <div className="form-group">
+                            <label>用户名</label>
+                            <input type="text" className="form-control" ref="query_user" />
+                            <label>密码</label>
+                            <input type="password" className="form-control" ref="query_password" />
+                        </div>
+                        <button type="button" className="btn btn-default" onClick={this.handleQueryClick}>查询</button>
+                    </form>
+                </div>
+                <div class="row">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <td>文件系统</td>
+                                <td>类型</td>
+                                <td>软限制百分比</td>
+                                <td>硬限制百分比</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {disk_usage_nodes}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+});
+
+
 var UserJobQueryBox = React.createClass({
     getInitialState: function() {
         return {
@@ -306,57 +452,6 @@ var UserJobQueryBox = React.createClass({
     }
 });
 
-
-var SmsServerStatusBoard = React.createClass({
-    getInitialState: function() {
-        return {
-            sms_server_info: null
-        }
-    },
-    componentDidMount: function() {
-        var component = this;
-        socket.on('send_sms_info', function(message){
-            // console.log(message);
-            component.setState({
-                sms_server_info: message
-            })
-        })
-    },
-    render : function(){
-        var sms_server_nodes = '';
-        if (this.state.sms_server_info) {
-            sms_server_nodes = this.state.sms_server_info.map(function (server_info) {
-                var sms_server_name = server_info.sms_server.sms_name;
-                var sms_server_status;
-                var sms_server_label_class;
-                if (server_info.ping_result.hasOwnProperty('error')) {
-                    sms_server_status = 'Error';
-                    sms_server_label_class = 'label label-danger';
-                } else {
-                    sms_server_status = 'Ok';
-                    sms_server_label_class = 'label label-success';
-                }
-                return (
-                    <tr>
-                        <td>{sms_server_name}</td>
-                        <td><span className={sms_server_label_class} >{sms_server_status}</span></td>
-                    </tr>
-                )
-            });
-        }
-
-        return (
-            <div className="smsServerStatusBoard">
-                <table className="table">
-                    <tbody>
-                        {sms_server_nodes}
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
-});
-
 React.render(
     <LoadlevelerTotalJobBoard />,
     document.getElementById('llq_total_job_board')
@@ -370,6 +465,11 @@ React.render(
 React.render(
     <LoadlevelerUserJobCountListBoard />,
     document.getElementById('llq_user_job_count_board')
+);
+
+React.render(
+    <UserDiskUsageQueryBox />,
+    document.getElementById('user_disk_usage_query_container')
 );
 
 React.render(

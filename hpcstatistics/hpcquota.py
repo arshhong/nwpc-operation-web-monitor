@@ -14,7 +14,10 @@ def get_cmquota_by_user(hostname,port,username,password):
         stdin, stdout, stderr = ssh.exec_command(ssh_command)
     except paramiko.SSHException, e:
         print e
-        return "{'error':'error'}"
+        return {
+            'error': 'error',
+            'error_msg': str(e)
+        }
 
     result_lines = stdout.read().split("\n")
     ssh.close()
@@ -57,9 +60,7 @@ def get_cmquota_by_user(hostname,port,username,password):
     quota_result['user_name'] = username
     quota_result['host'] = hostname
     quota_result['port'] = port
-    import json
-    dump = json.dumps(quota_result)
-    return dump
+    return quota_result
 
 if __name__ == "__main__":
     hostname = '10.20.49.124'
