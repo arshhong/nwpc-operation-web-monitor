@@ -310,6 +310,12 @@ var UserDiskUsageQueryBox = React.createClass({
         socket.emit('user_disk_usage', message);
 
     },
+    handleClearClick: function(e){
+        e.preventDefault();
+        this.setState({
+            user_disk_usage: null
+        });
+    },
     render: function() {
         var disk_usage_nodes;
         if( this.state.user_disk_usage == null){
@@ -346,6 +352,7 @@ var UserDiskUsageQueryBox = React.createClass({
                             <input type="password" className="form-control" ref="query_password" />
                         </div>
                         <button type="button" className="btn btn-default" onClick={this.handleQueryClick}>查询</button>
+                        <button type="button" className="btn btn-default" onClick={this.handleClearClick}>清空</button>
                     </form>
                 </div>
                 <div class="row">
@@ -400,6 +407,12 @@ var UserJobQueryBox = React.createClass({
         socket.emit('llq_detail_info', message);
 
     },
+    handleClearClick: function(e){
+        e.preventDefault();
+        this.setState({
+            llq_detail_info: null
+        });
+    },
     render: function() {
         var jobs_nodes;
         if( this.state.llq_detail_info == null){
@@ -438,6 +451,7 @@ var UserJobQueryBox = React.createClass({
                             <input type="text" className="form-control" placeholder="nwp" ref="query_user" />
                         </div>
                         <button type="button" className="btn btn-default" onClick={this.handleQueryClick}>查询</button>
+                        <button type="button" className="btn btn-default" onClick={this.handleClearClick}>清空</button>
                     </form>
                 </div>
                 <div class="row">
