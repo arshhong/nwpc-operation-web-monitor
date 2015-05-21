@@ -315,15 +315,17 @@ var UserDiskUsageQueryBox = React.createClass({
         this.setState({
             user_disk_usage: null
         });
+        React.findDOMNode(this.refs.query_user).value = '';
+        React.findDOMNode(this.refs.query_password).value = '';
     },
     render: function() {
-        var disk_usage_nodes;
+        var disk_usage_table;
         if( this.state.user_disk_usage == null){
-            disk_usage_nodes = '';
+            disk_usage_table = '';
         } else {
             var disk_usage= this.state.user_disk_usage;
             console.log(disk_usage);
-            disk_usage_nodes = disk_usage.file_systems.map(function(file_system){
+            var disk_usage_nodes = disk_usage.file_systems.map(function(file_system){
                 var current_soft_percent = file_system['current_usage']/
                     file_system['soft_limit']*100;
                 current_soft_percent = Number(current_soft_percent.toFixed(2));
@@ -340,6 +342,21 @@ var UserDiskUsageQueryBox = React.createClass({
                     </tr>
                 );
             });
+            disk_usage_table = (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <td>文件系统</td>
+                            <td>类型</td>
+                            <td>软限制百分比</td>
+                            <td>硬限制百分比</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {disk_usage_nodes}
+                    </tbody>
+                </table>
+            )
         }
         return (
             <div className="userDiskUsageQueryBox">
@@ -356,19 +373,7 @@ var UserDiskUsageQueryBox = React.createClass({
                     </form>
                 </div>
                 <div class="row">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <td>文件系统</td>
-                                <td>类型</td>
-                                <td>软限制百分比</td>
-                                <td>硬限制百分比</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {disk_usage_nodes}
-                        </tbody>
-                    </table>
+                    {disk_usage_table}
                 </div>
             </div>
         );
@@ -412,6 +417,7 @@ var UserJobQueryBox = React.createClass({
         this.setState({
             llq_detail_info: null
         });
+        React.findDOMNode(this.refs.query_user).value = '';
     },
     render: function() {
         var jobs_nodes;
