@@ -15,13 +15,14 @@ var LoadlevelerTotalJobBoard = React.createClass({
     componentDidMount: function(){
         var component = this;
         socket.on('send_llq_info', function(msg){
+            var llq_total_info = msg.total;
             //console.log('send_llq_info in component');
-            var total = parseInt(msg.in_queue);
-            var waiting = parseInt(msg.waiting);
-            var held = parseInt(msg.held);
-            var running = parseInt(msg.running);
-            var pending = parseInt(msg.pending);
-            var preempted = parseInt(msg.preempted);
+            var total = parseInt(llq_total_info.in_queue);
+            var waiting = parseInt(llq_total_info.waiting);
+            var held = parseInt(llq_total_info.held);
+            var running = parseInt(llq_total_info.running);
+            var pending = parseInt(llq_total_info.pending);
+            var preempted = parseInt(llq_total_info.preempted);
             component.setState({
                 total_job_number: total
             });
@@ -89,12 +90,13 @@ var LoadlevelerTypeChartBoard = React.createClass({
             .text(function(d){ return d.name; });
 
         socket.on('send_llq_info', function(msg){
-            var total = parseInt(msg.in_queue);
-            var waiting = parseInt(msg.waiting);
-            var held = parseInt(msg.held);
-            var running = parseInt(msg.running);
-            var pending = parseInt(msg.pending);
-            var preempted = parseInt(msg.preempted);
+            var llq_total_info = msg.total;
+            var total = parseInt(llq_total_info.in_queue);
+            var waiting = parseInt(llq_total_info.waiting);
+            var held = parseInt(llq_total_info.held);
+            var running = parseInt(llq_total_info.running);
+            var pending = parseInt(llq_total_info.pending);
+            var preempted = parseInt(llq_total_info.preempted);
 
             component.setState({
                 llq_info: [
@@ -162,12 +164,13 @@ var LoadlevelerTypeListBoard = React.createClass({
     componentDidMount: function() {
         var component = this;
         socket.on('send_llq_info', function(msg) {
-            var total = parseInt(msg.in_queue);
-            var waiting = parseInt(msg.waiting);
-            var held = parseInt(msg.held);
-            var running = parseInt(msg.running);
-            var pending = parseInt(msg.pending);
-            var preempted = parseInt(msg.preempted);
+            var llq_total_info = msg.total;
+            var total = parseInt(llq_total_info.in_queue);
+            var waiting = parseInt(llq_total_info.waiting);
+            var held = parseInt(llq_total_info.held);
+            var running = parseInt(llq_total_info.running);
+            var pending = parseInt(llq_total_info.pending);
+            var preempted = parseInt(llq_total_info.preempted);
             component.setState({
                 total: total,
                 waiting: waiting,
