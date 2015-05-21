@@ -150,45 +150,72 @@ var LoadlevelerTypeChartBoard = React.createClass({
     }
 });
 
-var LoadlevelerTypeListBoard = React.createClass({
+var LoadlevelerUserJobCountListBoard = React.createClass({
     getInitialState: function() {
         return {
-            total: 'unknown',
-            waiting: 'unknown',
-            pending: 'unknown',
-            running: 'unknown',
-            held: 'unknown',
-            preempted: 'unknown'
+            llq_jobs: null
         }
     },
     componentDidMount: function() {
         var component = this;
         socket.on('send_llq_info', function(msg) {
-            var llq_total_info = msg.total;
-            var total = parseInt(llq_total_info.in_queue);
-            var waiting = parseInt(llq_total_info.waiting);
-            var held = parseInt(llq_total_info.held);
-            var running = parseInt(llq_total_info.running);
-            var pending = parseInt(llq_total_info.pending);
-            var preempted = parseInt(llq_total_info.preempted);
+            var llq_jobs = msg.jobs;
             component.setState({
-                total: total,
-                waiting: waiting,
-                pending: pending,
-                running: running,
-                held: held,
-                preempted: preempted
-            })
+                llq_jobs: llq_jobs
+            });
         });
     },
     render: function() {
+        var user_job_count_nodes = '';
+        var llq_jobs_map = d3.map();
+        if(this.state.llq_jobs) {
+            this.state.llq_jobs.forEach(function (element, index, array) {
+                var owner_name = element.owner;
+                if (llq_jobs_map.get(owner_name) == undefined) {
+                    llq_jobs_map.set(owner_name, [element]);
+                } else {
+                    llq_jobs_map.get(owner_name).push(element);
+                }
+            });
+            var llq_user_job_count_list = [];
+            llq_jobs_map.forEach(function (d) {
+                llq_user_job_count_list.push({
+                    owner: d,
+                    count: llq_jobs_map.get(d).length
+                });
+            });
+            llq_user_job_count_list.sort(function (a, b) {
+                if (a.count > b.count) {
+                    return 1;
+                }
+                if (a.count < b.count) {
+                    return -1;
+                }
+                return 0;
+            }).reverse();
+
+            // 只显示前10个用户
+            llq_user_job_count_list.splice(10, Number.MAX_VALUE);
+
+            user_job_count_nodes = llq_user_job_count_list.map(function (user_job_count) {
+                var user = user_job_count.owner;
+                var count = user_job_count.count;
+                return (
+                    <div className="row">
+                        <div className="col-md-2">{user}:</div>
+                        <div className="col-md-2">{count}</div>
+                    </div>
+                )
+            });
+        }
         return (
-            <div className="loadlevelerTypeListBoard">
-                <p>Waiting:{this.state.waiting}</p>
-                <p>Pending:{this.state.pending}</p>
-                <p>Running:{this.state.running}</p>
-                <p>Held:{this.state.held}</p>
-                <p>Preempted:{this.state.preempted}</p>
+            <div className="loadlevelerUserJobCountListBoard">
+                <div className="row">作业最多的十位用户</div>
+                <div className="row">
+                    <div className="col-md-12">
+                    {user_job_count_nodes}
+                    </div>
+                </div>
             </div>
         )
     }
@@ -341,8 +368,8 @@ React.render(
 );
 
 React.render(
-    <LoadlevelerTypeListBoard />,
-    document.getElementById('llq_type_list_board')
+    <LoadlevelerUserJobCountListBoard />,
+    document.getElementById('llq_user_job_count_board')
 );
 
 React.render(
