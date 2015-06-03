@@ -3,7 +3,7 @@
  */
 
 
-var socket = io.connect('http://127.0.0.1:5101/hpc');
+var socket = io.connect('http://10.28.32.175:5101/hpc');
 socket.on('connect', function() {
     console.log('I\'m connected!');
 });
