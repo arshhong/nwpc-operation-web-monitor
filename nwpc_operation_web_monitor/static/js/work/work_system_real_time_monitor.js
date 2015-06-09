@@ -333,11 +333,41 @@ var UserDiskUsageQueryBox = React.createClass({
                 var current_hard_percent = file_system['current_usage']/
                     file_system['hard_limit']*100;
                 current_hard_percent = Number(current_hard_percent.toFixed(2));
+
+                /**
+                 * @param disk_space 单位为KB
+                 * @returns {*}
+                 */
+                function change_space_unit(disk_space){
+                    var unit = 'KB';
+                    var space = disk_space;
+                    if(space > Math.pow(10, 9)){
+                        space = (space / Math.pow(10,9)).toFixed(2);
+                        unit = "TB";
+                    } else if (space > Math.pow(10,6)){
+                        space = (space / Math.pow(10,6)).toFixed(2);
+                        unit = "GB";
+                    } else if (space > Math.pow(10,3)){
+                        space = (space / Math.pow(10,3) ).toFixed(2);
+                        unit = "MB";
+                    }
+                    var result = Object();
+                    result.space = space;
+                    result.unit = unit;
+                    return result;
+                }
+
+                var free_disk_space = file_system.hard_limit- file_system.current_usage;
+                var free_disk_result = change_space_unit(free_disk_space);
+                var total_disk_space = file_system.hard_limit;
+                var total_disk_result = change_space_unit(total_disk_space);
+
                 return (
                     <tr>
                         <td>{file_system.file_system}</td>
                         <td>{file_system.quota_type}</td>
-                        <td>{current_soft_percent}%</td>
+                        <td>{total_disk_result.space} {total_disk_result.unit}</td>
+                        <td>{free_disk_result.space} {free_disk_result.unit}</td>
                         <td>{current_hard_percent}%</td>
                     </tr>
                 );
@@ -348,8 +378,9 @@ var UserDiskUsageQueryBox = React.createClass({
                         <tr>
                             <td>文件系统</td>
                             <td>类型</td>
-                            <td>软限制百分比</td>
-                            <td>硬限制百分比</td>
+                            <td>总空间</td>
+                            <td>剩余大小</td>
+                            <td>使用百分比</td>
                         </tr>
                     </thead>
                     <tbody>
