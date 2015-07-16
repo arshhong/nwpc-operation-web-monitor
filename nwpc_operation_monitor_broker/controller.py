@@ -6,6 +6,8 @@ from flask import json, request, jsonify,render_template
 from flask.ext.socketio import emit
 import redis
 
+import requests
+
 REDIS_HOST = '10.28.32.175'
 redis_client = redis.Redis(host=REDIS_HOST)
 
@@ -83,7 +85,11 @@ def get_sms_staus():
     redis_client.set(key, json.dumps(message_data))
 
     # 发送给外网服务器
-
+    sae_url = "http://nwpcmonitor.sinaapp.com/api/v1/hpc/sms/status"
+    sae_post_data = {
+        'message': json.dumps(message)
+    }
+    requests.post(sae_url, data=sae_post_data)
     result = {
         'status': 'ok'
     }
