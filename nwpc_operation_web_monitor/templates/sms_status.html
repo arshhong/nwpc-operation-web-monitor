@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NWPC's SMS Suite Status</title>
+    <style type="text/css">
+    body {font-family: Menlo, Monaco, Consolas, "Courier New", monospace;}
+    </style>
+</head>
+<body>
+<section class="current_time">
+    <p>{{ current_time }}</p>
+</section>
+{% for sms_server in sms_status_data %}
+<section class="sms_server">
+    <h2>{{ sms_server['sms_user'] }}/{{ sms_server['sms_name'] }}</h2>
+    <p>{{ sms_server['time'] }}</p>
+    {%  if sms_server['status'] %}
+    <ui>
+        {% for sms_status in sms_server['status'] %}
+            <li>[{{ sms_status['status'] }}] {{ sms_status['path'] }}</li>
+        {% endfor %}
+    </ui>
+    {% endif %}
+</section>
+{% endfor %}
+</body>
+</html>
