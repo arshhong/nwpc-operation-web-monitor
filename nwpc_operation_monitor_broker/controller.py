@@ -1,9 +1,13 @@
+# coding=utf-8
 from nwpc_operation_monitor_broker import socketio, app
 from hpcstatistics import hpcloadleveler, hpcquota
 
 from flask import json, request, jsonify,render_template
 from flask.ext.socketio import emit
+import redis
 
+REDIS_HOST = '10.28.32.175'
+redis_client = redis.Redis(host=REDIS_HOST)
 
 @app.route('/')
 def get_index_page():
@@ -50,6 +54,36 @@ def get_sms_info():
     hpc_sms_info_message = json.loads(request.form['message'])
     print "Receive sms info"
     socketio.emit('send_sms_info', hpc_sms_info_message, namespace='/hpc')
+    result = {
+        'status': 'ok'
+    }
+    return jsonify(result)
+
+
+@app.route('/api/v1/hpc/sms/status', methods=['POST'])
+def get_sms_staus():
+    r = request
+    message = json.loads(request.form['message'])
+
+    print message
+
+    if 'error' in message:
+        result = {
+            'status': 'ok'
+        }
+        return jsonify(result)
+
+    message_data = message['data']
+    sms_name = message_data['sms_name']
+    sms_user = message_data['sms_user']
+
+    # 保存到本地缓存
+    key = "hpc/sms/{sms_user}/{sms_name}/status".format(sms_user=sms_user, sms_name=sms_name)
+    print key
+    redis_client.set(key, json.dumps(message_data))
+
+    # 发送给外网服务器
+
     result = {
         'status': 'ok'
     }
