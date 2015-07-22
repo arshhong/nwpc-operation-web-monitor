@@ -63,7 +63,7 @@ def get_sms_info():
 
 
 @app.route('/api/v1/hpc/sms/status', methods=['POST'])
-def get_sms_staus():
+def get_sms_status():
     r = request
     message = json.loads(request.form['message'])
 

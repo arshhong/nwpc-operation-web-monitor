@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NWPC's SMS Suite Status</title>
+    <style type="text/css">
+        body {
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        }
+        .sms-status-act {
+            color: green;
+        }
+        .sms-status-que {
+            color: blue;
+        }
+        .sms-status-sus {
+            color: orange;
+        }
+        .sms-status-abo {
+            color: red
+        }
+
+    </style>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?4a4e7a0d83ac0592cced0ea18c119ed4";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+<section class="current_time">
+    <p>{{ current_time }}</p>
+</section>
+{% for sms_server in sms_status_data %}
+<section class="sms_server">
+    <h2>{{ sms_server['sms_user'] }}/{{ sms_server['sms_name'] }}</h2>
+    <p>{{ sms_server['time'] }}</p>
+    {%  if sms_server['status'] %}
+    <ui>
+        {% for sms_status in sms_server['status'] %}
+            <li>[<span class="sms-status-{{ sms_status['status'] }}">{{ sms_status['status'] }}</span>] {{ sms_status['path'] }}</li>
+        {% endfor %}
+    </ui>
+    {% endif %}
+</section>
+{% endfor %}
+</body>
+</html>
