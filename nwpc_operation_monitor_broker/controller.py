@@ -67,8 +67,6 @@ def get_sms_status():
     r = request
     message = json.loads(request.form['message'])
 
-    print message
-
     if 'error' in message:
         result = {
             'status': 'ok'
