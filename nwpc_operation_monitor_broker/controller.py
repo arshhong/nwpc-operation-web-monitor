@@ -64,6 +64,11 @@ def get_sms_info():
 
 @app.route('/api/v1/hpc/sms/status', methods=['POST'])
 def get_sms_status():
+    """
+    接收外部发送来的 SMS 服务器的状态，将其保存到本地缓存，并发送到外网服务器
+    :return:
+    """
+
     r = request
     message = json.loads(request.form['message'])
 
