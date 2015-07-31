@@ -39,6 +39,7 @@
 <section class="sms_server">
     <h2>{{ sms_server['sms_user'] }}/{{ sms_server['sms_name'] }}</h2>
     <p>{{ sms_server['time'] }}</p>
+    <p>Delay: {{ sms_server['delay_time'] }}</p>
     {%  if sms_server['status'] %}
     <ui>
         {% for sms_status in sms_server['status'] %}
