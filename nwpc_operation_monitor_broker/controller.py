@@ -11,6 +11,9 @@ import requests
 REDIS_HOST = '10.28.32.175'
 redis_client = redis.Redis(host=REDIS_HOST)
 
+dingding_access_token = '10509dc21332395bb01203467b18d7f4'
+
+
 @app.route('/')
 def get_index_page():
     return render_template('index.html')
@@ -82,9 +85,60 @@ def get_sms_status():
     sms_name = message_data['sms_name']
     sms_user = message_data['sms_user']
 
-    # 保存到本地缓存
+    # 检测是否需要推送警告信息
     key = "hpc/sms/{sms_user}/{sms_name}/status".format(sms_user=sms_user, sms_name=sms_name)
     print key
+    # 获取服务器'/' 的状态
+    if len(message_data["status"]) >0:
+        server_status = message_data["status"][0] # TODO：使用循环查找
+        if server_status['status'] == 'abo':
+            cached_message_string = redis_client.get(key)
+            if cached_message_string is not None:
+                cached_message = json.loads(cached_message_string)
+                previous_server_status = cached_message['status'][0]
+                if previous_server_status['status'] != 'abo':
+                    # 发送推送警告
+                    print 'Get aborted. Pushing warning message...'
+                    sms_server_name=server_status['name']
+                    warning_post_url = 'https://oapi.dingtalk.com/message/send?access_token={dingding_access_token}'.format(
+                        dingding_access_token=dingding_access_token
+                    )
+                    warning_post_message = {
+                        "touser":"manager4941",
+                        "agentid":"4078086",
+                        "msgtype":"oa",
+                        "oa": {
+                            "message_url": "http://nwpcmonitor.sinaapp.com",
+                            "head": {
+                                "bgcolor": "ffff0000",
+                                "text": "业务系统运行状态"
+                            },
+                            "body":{
+                                "title":"系统运行出错",
+                                "content":"业务系统出错，请查看",
+                                "form":[
+                                    {
+                                        "key": "{sms_server_name} :".format(sms_server_name=sms_server_name),
+                                        "value": "aborted"
+                                    },
+                                    {
+                                        "key": "时间",
+                                        "value": "{timestamp}".format(timestamp=message_data['time'])
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                    warning_post_headers = {'content-type': 'application/json'}
+                    warning_post_data = json.dumps(warning_post_message)
+
+                    result = requests.post(warning_post_url,
+                                           data=warning_post_data,
+                                           verify=False,
+                                           headers=warning_post_headers)
+                    print result.json()
+
+    # 保存到本地缓存
     redis_client.set(key, json.dumps(message_data))
 
     # 发送给外网服务器
