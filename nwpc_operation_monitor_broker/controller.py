@@ -11,7 +11,7 @@ import requests
 REDIS_HOST = '10.28.32.175'
 redis_client = redis.Redis(host=REDIS_HOST)
 
-dingding_access_token = '10509dc21332395bb01203467b18d7f4'
+#dingding_access_token = '10509dc21332395bb01203467b18d7f4'
 
 
 @app.route('/')
@@ -99,9 +99,17 @@ def get_sms_status():
                 if previous_server_status['status'] != 'abo':
                     # 发送推送警告
                     print 'Get aborted. Pushing warning message...'
+
+                    # 获取 access token
+                    access_token_key = "dingtalk_access_token"
+                    dingtalk_access_token = redis_client.get(access_token_key)
+                    if dingtalk_access_token is None:
+                        get_dingtalk_access_token()
+                        dingtalk_access_token = redis_client.get(access_token_key)
+
                     sms_server_name=server_status['name']
-                    warning_post_url = 'https://oapi.dingtalk.com/message/send?access_token={dingding_access_token}'.format(
-                        dingding_access_token=dingding_access_token
+                    warning_post_url = 'https://oapi.dingtalk.com/message/send?access_token={dingtalk_access_token}'.format(
+                        dingtalk_access_token=dingtalk_access_token
                     )
                     warning_post_message = {
                         "touser":"manager4941",
@@ -150,6 +158,34 @@ def get_sms_status():
     result = {
         'status': 'ok'
     }
+    return jsonify(result)
+
+@app.route('/api/v1/dingtalk/access_token/get', methods=['GET'])
+def get_dingtalk_access_token():
+    key = "dingtalk_access_token"
+    corp_id = 'ding9f1a223d867202cd'
+    corp_secret = 'N-16cm_wfvGcHuweaXoJTTKhBY9NDEFwISHw_UqDnm18WxwLSvMIQwaRDI7z4mXE'
+
+    headers = {'content-type': 'application/json'}
+    url = 'https://oapi.dingtalk.com/gettoken?corpid={corp_id}&corpsecret={corp_secret}'.format(
+        corp_id=corp_id, corp_secret=corp_secret
+    )
+    token_response = requests.get(url,verify=False, headers=headers)
+    response_json = token_response.json()
+    print response_json
+    if response_json['errcode'] == 0:
+        # 更新 token
+        access_token = response_json['access_token']
+        redis_client.set(key, access_token)
+        result = {
+            'status': 'ok',
+            'access_token': access_token
+        }
+    else:
+        result = {
+            'status': 'error',
+            'errcode': response_json['errcode']
+        }
     return jsonify(result)
 
 
