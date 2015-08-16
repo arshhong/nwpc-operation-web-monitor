@@ -112,7 +112,7 @@ def get_sms_status():
                         dingtalk_access_token=dingtalk_access_token
                     )
                     warning_post_message = {
-                        "touser":"manager4941",
+                        "touser":"wangdp",
                         "agentid":"4078086",
                         "msgtype":"oa",
                         "oa": {
