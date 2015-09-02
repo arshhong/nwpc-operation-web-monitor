@@ -112,7 +112,7 @@ def get_sms_status():
                         dingtalk_access_token=dingtalk_access_token
                     )
                     warning_post_message = {
-                        "touser":"wangdp",
+                        "touser":"manager4941|member20",
                         "agentid":"4078086",
                         "msgtype":"oa",
                         "oa": {
@@ -130,7 +130,7 @@ def get_sms_status():
                                         "value": "aborted"
                                     },
                                     {
-                                        "key": "时间",
+                                        "key": "时间 :",
                                         "value": "{timestamp}".format(timestamp=message_data['time'])
                                     }
                                 ]
