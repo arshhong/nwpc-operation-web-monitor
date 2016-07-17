@@ -57,12 +57,12 @@ var system_run_time_data = [
 ];
 
 var svg_size = {
-    'width': 1000,
+    'width': 1200,
     'height': 400
 };
 
 var chart_start_point = {
-    'x': 50,
+    'x': 150,
     'y': 30
 };
 
@@ -106,6 +106,20 @@ var time_bar_data_enter = time_bar_data
         return 'translate(0, '+ (30*i+5) +')'
     })
     .classed('system-entry', true);
+
+var system_name_label = time_bar_data_enter
+    .append('text')
+    .attr('x', function(d,i){
+        return -10
+    })
+    .attr('y', function(d,i){
+        return 10;
+    })
+    .text(function(d,i){
+        return d.name;
+    })
+    .attr('text-anchor', 'end')
+    .attr("dominant-baseline", "central");
 
 var run_time_data = time_bar_data_enter
     .selectAll('.run-time-item');
