@@ -97,16 +97,24 @@ var time_bar_group = svg.append("g")
     .attr('transform', 'translate('+ chart_start_point.x +','+ chart_start_point.y + ')');
 
 var time_bar_data = time_bar_group.selectAll('.system-entry')
-    .data(system_run_time_data)
+    .data(system_run_time_data);
+
+var time_bar_data_enter = time_bar_data
     .enter()
     .append('g')
     .attr('transform', function(d, i){
-        return 'translate(0, '+ 30*i +')'
+        return 'translate(0, '+ (30*i+5) +')'
     })
-    .classed('system-entry', true)
-    .selectAll('.run-time-item')
+    .classed('system-entry', true);
+
+var run_time_data = time_bar_data_enter
+    .selectAll('.run-time-item');
+
+var run_time_data_enter = run_time_data
     .data(function(d){ return d.run_times})
-    .enter()
+    .enter();
+
+run_time_data_enter
     .append('rect')
     .attr('x', function(d, i){
         var local_start_time = d.start_time;
@@ -139,4 +147,24 @@ var time_bar_data = time_bar_group.selectAll('.system-entry')
         return x_scale(current_end_time) - x_scale(current_start_time);
     })
     .attr('height', 20)
+    .style('stroke-width', '2px')
+    .style('fill', 'transparent')
+    .style('stroke', 'black')
     .classed('run-time-item', true);
+
+run_time_data_enter.append('text')
+    .attr('x', function(d, i){
+        var local_start_time = d.start_time;
+        var hour = parseInt(local_start_time.substr(0, 2));
+        var minute = parseInt(local_start_time.substr(3, 2));
+        var current_start_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, hour), minute);
+
+        return x_scale(current_start_time) + 5;
+    })
+    .attr('y', function(d, i){
+        return 10;
+    })
+    .text(function(d, i){
+        return d.name;
+    })
+    .attr("dominant-baseline", "central");
