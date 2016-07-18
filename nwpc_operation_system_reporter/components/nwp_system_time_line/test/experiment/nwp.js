@@ -61,19 +61,18 @@ function draw_legend(){
 
     var legend_bar_label = legend_bar.append('text')
         .attr('x', -15)
-        .attr('y', 25)
+        .attr('y', 15)
         .attr("dominant-baseline", "central")
-        .attr("text-anchor", "end");
-    legend_bar_label
-        .append('tspan')
-        .attr('x', -15)
-        .attr('dy', -20)
-        .text("队列名称(图中数字为并行");
-    legend_bar_label
-        .append('tspan')
-        .attr('x', -15)
-        .attr('dy', 20)
-        .text("队列使用的CPU核心数)")
+        .attr("text-anchor", "end")
+        .text("队列名称");
+
+
+    legend_bar.append('text')
+        .attr('x', 0)
+        .attr('y', 40)
+        .attr("dominant-baseline", "central")
+        .attr("text-anchor", "start")
+        .text("图中数字为并行队列使用的CPU核心数");
 }
 
 draw_legend();
