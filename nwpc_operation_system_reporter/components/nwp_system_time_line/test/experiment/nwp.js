@@ -3,66 +3,13 @@
  */
 
 
-var system_run_time_data = [
-    {
-        'name': 'gda_gsi_v1r5',
-        'run_times':[
-            {
-                'name': '00',
-                'start_time': '10:00',
-                'end_time': '10:58'
-            },
-            {
-                'name': '06',
-                'start_time': '13:40',
-                'end_time': '14:38'
-            },
-            {
-                'name': '12',
-                'start_time': '22:00',
-                'end_time': '22:58'
-            },
-            {
-                'name': '18',
-                'start_time': '01:40',
-                'end_time': '02:44'
-            }
-        ]
-    },
-    {
-        'name': 'gmf_gsi_v1r5',
-        'run_times':[
-            {
-                'name': '00',
-                'start_time': '03:29',
-                'end_time': '05:37'
-            },
-            {
-                'name': '06',
-                'start_time': '11:15',
-                'end_time': '13:18'
-            },
-            {
-                'name': '12',
-                'start_time': '15:29',
-                'end_time': '17:40'
-            },
-            {
-                'name': '18',
-                'start_time': '23:45',
-                'end_time': '01:44'
-            }
-        ]
-    }
-];
-
 var svg_size = {
-    'width': 1200,
-    'height': 400
+    'width': 1400,
+    'height': 800
 };
 
 var chart_start_point = {
-    'x': 150,
+    'x': 200,
     'y': 30
 };
 
@@ -158,7 +105,10 @@ run_time_data_enter
         else{
             current_end_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, end_hour), end_minute);
         }
-        return x_scale(current_end_time) - x_scale(current_start_time);
+
+        var bar_width = x_scale(current_end_time) - x_scale(current_start_time);
+
+        return bar_width>=1?bar_width:1;
     })
     .attr('height', 20)
     .style('stroke-width', '2px')
@@ -173,7 +123,7 @@ run_time_data_enter.append('text')
         var minute = parseInt(local_start_time.substr(3, 2));
         var current_start_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, hour), minute);
 
-        return x_scale(current_start_time) + 5;
+        return x_scale(current_start_time) - 2;
     })
     .attr('y', function(d, i){
         return 10;
@@ -181,4 +131,5 @@ run_time_data_enter.append('text')
     .text(function(d, i){
         return d.name;
     })
-    .attr("dominant-baseline", "central");
+    .attr("dominant-baseline", "central")
+    .attr("text-anchor", "end");
