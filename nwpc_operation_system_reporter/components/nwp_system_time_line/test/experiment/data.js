@@ -8,7 +8,7 @@ var system_run_time_data = [
                 'end_time': '10:58',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '10:40',
                         'end_time': '10:46'
                     }
@@ -20,7 +20,7 @@ var system_run_time_data = [
                 'end_time': '14:38',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '14:18',
                         'end_time': '14:26'
                     }
@@ -32,7 +32,7 @@ var system_run_time_data = [
                 'end_time': '22:58',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '22:38',
                         'end_time': '22:46'
                     }
@@ -44,7 +44,7 @@ var system_run_time_data = [
                 'end_time': '02:44',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '02:24',
                         'end_time': '02:32'
                     }
@@ -61,7 +61,7 @@ var system_run_time_data = [
                 'end_time': '05:37',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '04:12',
                         'end_time': '05:10'
                     }
@@ -73,7 +73,7 @@ var system_run_time_data = [
                 'end_time': '13:18',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '11:57',
                         'end_time': '12:38'
                     }
@@ -85,7 +85,7 @@ var system_run_time_data = [
                 'end_time': '17:40',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '16:12',
                         'end_time': '17:14'
                     }
@@ -97,7 +97,7 @@ var system_run_time_data = [
                 'end_time': '01:44',
                 'run_times': [
                     {
-                        'name': '20*32',
+                        'name': '640',
                         'start_time': '00:27',
                         'end_time': '01:05'
                     }

@@ -43,18 +43,21 @@ var axis_group = svg.append("g")
 var time_bar_group = svg.append("g")
     .attr('transform', 'translate('+ chart_start_point.x +','+ chart_start_point.y + ')');
 
-var time_bar_data = time_bar_group.selectAll('.system-entry')
+
+// suite
+var suite_data = time_bar_group.selectAll('.suite')
     .data(system_run_time_data);
 
-var time_bar_data_enter = time_bar_data
+var suite_data_enter = suite_data
     .enter()
     .append('g')
     .attr('transform', function(d, i){
         return 'translate(0, '+ (30*i+5) +')'
     })
-    .classed('system-entry', true);
+    .classed('suite', true);
 
-var system_name_label = time_bar_data_enter
+// suite label
+var suite_label = suite_data_enter
     .append('text')
     .attr('x', function(d,i){
         return -10
@@ -68,14 +71,18 @@ var system_name_label = time_bar_data_enter
     .attr('text-anchor', 'end')
     .attr("dominant-baseline", "central");
 
-var run_time_data = time_bar_data_enter
-    .selectAll('.run-time-item');
 
-var run_time_data_enter = run_time_data
-    .data(function(d){ return d.run_times})
-    .enter();
+// time level item
+var time_level_data = suite_data_enter
+    .selectAll('.time-level-item')
+    .data(function(d){ return d.run_times});
 
-run_time_data_enter
+var time_level_enter = time_level_data
+    .enter()
+    .append("g")
+    .classed('time-level-item', true);
+
+time_level_enter
     .append('rect')
     .attr('x', function(d, i){
         var local_start_time = d.start_time;
@@ -113,10 +120,10 @@ run_time_data_enter
     .attr('height', 20)
     .style('stroke-width', '2px')
     .style('fill', 'transparent')
-    .style('stroke', 'black')
-    .classed('run-time-item', true);
+    .style('stroke', 'black');
 
-run_time_data_enter.append('text')
+
+time_level_enter.append('text')
     .attr('x', function(d, i){
         var local_start_time = d.start_time;
         var hour = parseInt(local_start_time.substr(0, 2));
@@ -133,3 +140,76 @@ run_time_data_enter.append('text')
     })
     .attr("dominant-baseline", "central")
     .attr("text-anchor", "end");
+
+// parallel time
+var task_level_data = time_level_enter
+    .selectAll('.task-level-item')
+    .data(function(d){
+        if('run_times' in d)
+            return d.run_times;
+        else
+            return []
+    });
+
+var task_level_enter = task_level_data
+    .enter()
+    .append('g')
+    .classed('task-level-item', true);
+
+task_level_enter
+    .append('rect')
+    .attr('x', function(d, i){
+        var local_start_time = d.start_time;
+        var hour = parseInt(local_start_time.substr(0, 2));
+        var minute = parseInt(local_start_time.substr(3, 2));
+        var current_start_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, hour), minute);
+
+        return x_scale(current_start_time);
+    })
+    .attr('y', function(d, i){
+        return 0;
+    })
+    .attr('width', function(d,i){
+        var local_start_time = d.start_time;
+        var hour = parseInt(local_start_time.substr(0, 2));
+        var minute = parseInt(local_start_time.substr(3, 2));
+        var current_start_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, hour), minute);
+
+        var local_end_time = d.end_time;
+        var end_hour = local_end_time.substr(0, 2);
+        var end_minute = local_end_time.substr(3, 2);
+        var current_end_time;
+        if(end_hour < hour)
+        {
+            current_end_time = d3.timeMinute.offset(d3.timeHour.offset(next_date, end_hour), end_minute);
+        }
+        else{
+            current_end_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, end_hour), end_minute);
+        }
+
+        var bar_width = x_scale(current_end_time) - x_scale(current_start_time);
+
+        return bar_width>=1?bar_width:1;
+    })
+    .attr('height', 20)
+    .style('stroke-width', '2px')
+    .style('fill', 'transparent')
+    .style('stroke', 'black');
+
+task_level_enter.append('text')
+    .attr('x', function(d, i){
+        var local_start_time = d.start_time;
+        var hour = parseInt(local_start_time.substr(0, 2));
+        var minute = parseInt(local_start_time.substr(3, 2));
+        var current_start_time = d3.timeMinute.offset(d3.timeHour.offset(start_hour, hour), minute);
+
+        return x_scale(current_start_time) + 1;
+    })
+    .attr('y', function(d, i){
+        return 10;
+    })
+    .text(function(d, i){
+        return d.name;
+    })
+    .attr("dominant-baseline", "central")
+    .attr("text-anchor", "start");
