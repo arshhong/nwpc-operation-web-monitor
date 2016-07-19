@@ -400,13 +400,13 @@ var system_run_time_data = [
         'run_times':[
             {
                 'name': '00',
-                'label': '512',
+                'label': '2048',
                 'start_time': '03:30',
                 'end_time': '06:47',
                 'class':'serial_op',
                 'run_times': [
                     {
-                        'name': '512',
+                        'name': '2048',
                         'label': 'p',
                         'start_time': '04:19',
                         'end_time': '06:21',
@@ -416,13 +416,13 @@ var system_run_time_data = [
             },
             {
                 'name': '12',
-                'label': '512',
+                'label': '2048',
                 'start_time': '15:30',
                 'end_time': '18:48',
                 'class':'serial_op',
                 'run_times': [
                     {
-                        'name': '512',
+                        'name': '2048',
                         'label': 'p',
                         'start_time': '16:22',
                         'end_time': '18:23',
