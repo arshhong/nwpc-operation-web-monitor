@@ -5,7 +5,7 @@
 
 var svg_size = {
     'width': 1800,
-    'height': 800
+    'height': 1000
 };
 
 var chart_option = {

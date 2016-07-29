@@ -3,14 +3,15 @@ var color_lib = d3.schemeCategory20c;
 
 var color_domain = [
     'unknown',
-    'serial', 'serial_op', 'operation',
+    'serial', 'serial_op', 'serial_op1',
+    'operation',
     'operation1', 'operation2', 'normal', 'largemem'
 ];
 
 
 var color_range = [
         '#bdbdbd',
-        '#4575b4', '#74add1',
+        '#4575b4', '#74add1','#deebf7',
         '#cc4c02', '#f46d43', '#feb24c', '#cb181d', '#67000d'
     ];
 
