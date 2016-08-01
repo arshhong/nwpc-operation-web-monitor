@@ -212,23 +212,16 @@ var system_run_time_data = [
             },
             {
                 'name': '12',
-                'label': '',
-                'start_time': '16:40',
-                'end_time': '23:59',
-                'class':'serial_op'
-            },
-            {
-                'name': '12',
                 'label': '512',
-                'start_time': '00:00',
-                'end_time': '05:12',
+                'start_time': '16:40',
+                'end_time': '19:49',
                 'class':'serial_op',
                 'run_times': [
                     {
                         'name': '512',
                         'label': 'p',
-                        'start_time': '00:05',
-                        'end_time': '04:35',
+                        'start_time': '17:02',
+                        'end_time': '19:13',
                         'class':'operation'
                     }
                 ]
@@ -998,14 +991,14 @@ var system_run_time_data = [
                 'name': '12',
                 'label': '5760',
                 'start_time': '00:00',
-                'end_time': '02:26',
+                'end_time': '03:58',
                 'class':'serial_op1',
                 'run_times': [
                     {
                         'name': '5760',
                         'label': 'p',
                         'start_time': '00:00',
-                        'end_time': '02:03',
+                        'end_time': '03:20',
                         'class':'operation1'
                     }
                 ]

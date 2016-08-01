@@ -130,14 +130,14 @@ var system_run_time_data = [
                 'name': '18',
                 'label': '640',
                 'start_time': '00:00',
-                'end_time': '01:05',
+                'end_time': '01:46',
                 'class':'serial_op',
                 'run_times': [
                     {
                         'name': '640',
                         'label': 'p',
-                        'start_time': '00:14',
-                        'end_time': '00:52',
+                        'start_time': '00:24',
+                        'end_time': '01:05',
                         'class':'operation'
                     }
                 ]
@@ -339,14 +339,14 @@ var system_run_time_data = [
                 'name': '18',
                 'label': '512',
                 'start_time': '01:00',
-                'end_time': '01:55',
+                'end_time': '02:08',
                 'class':'serial_op',
                 'run_times': [
                     {
                         'name': '512',
                         'label': 'p',
-                        'start_time': '01:04',
-                        'end_time': '01:52',
+                        'start_time': '01:12',
+                        'end_time': '02:05',
                         'class':'operation'
                     }
                 ]
@@ -381,7 +381,7 @@ var system_run_time_data = [
                 'name': '18',
                 'label': '',
                 'start_time': '01:30',
-                'end_time': '02:24',
+                'end_time': '02:35',
                 'class':'serial_op'
             }
         ]
@@ -970,7 +970,25 @@ var system_run_time_data = [
                         'class':'operation1'
                     }
                 ]
+            },
+
+            {
+                'name': '12',
+                'label': '5760',
+                'start_time': '00:00',
+                'end_time': '01:49',
+                'class':'serial_op1',
+                'run_times': [
+                    {
+                        'name': '5760',
+                        'label': 'p',
+                        'start_time': '00:00',
+                        'end_time': '01:26',
+                        'class':'operation1'
+                    }
+                ]
             }
+
         ]
     },
     {
@@ -1028,14 +1046,14 @@ var system_run_time_data = [
                 'name': '18',
                 'label': '4800',
                 'start_time': '00:30',
-                'end_time': '00:56',
+                'end_time': '01:16',
                 'class':'serial_op',
                 'run_times': [
                     {
                         'name': '4800',
                         'label': 'p',
-                        'start_time': '00:31',
-                        'end_time': '00:43',
+                        'start_time': '00:41',
+                        'end_time': '01:03',
                         'class':'operation1'
                     }
                 ]
