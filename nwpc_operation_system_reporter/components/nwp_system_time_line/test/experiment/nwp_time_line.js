@@ -77,7 +77,6 @@ function draw_legend(){
 
 draw_legend();
 
-
 var svg = d3.select("#time-line-container")
     .append("svg")
     .attr('width', svg_size.width)
@@ -92,11 +91,12 @@ var next_date = d3.timeDay.offset(start_hour, 1);
 
 var end_hour = d3.timeHour.offset(next_date, 0);
 
+// x scale
 var x_scale = d3.scaleTime()
     .domain([start_hour, end_hour])
     .range([0, svg_size.width - 2*chart_option.start_point.x]);
 
-// axis
+// x axis
 var x_axis = d3.axisTop(x_scale)
     .ticks(d3.timeHour.every(1))
     .tickFormat(d3.timeFormat("%H"))
@@ -107,10 +107,12 @@ var axis_group = svg.append("g")
     .classed('axis', true)
     .call(x_axis);
 
+// y scale
 var y_scale = d3.scaleLinear()
     .domain([0, system_run_time_data.length-1])
     .range([chart_option.suite.interval/2, (system_run_time_data.length-1)*chart_option.suite.interval + chart_option.suite.interval/2]);
 
+// y axis
 var y_axis = d3.axisLeft(y_scale)
     .ticks(system_run_time_data.length-1)
     .tickFormat("")
