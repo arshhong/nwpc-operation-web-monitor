@@ -1,7 +1,7 @@
 {
   "name": "nwp_system_time_line",
   "version": "1.0.0",
-  "description": "数值预报系统时间线",
+  "description": "A time line chart for operation systems of NWPC",
   "main": "index.js",
   "directories": {
     "doc": "docs",
@@ -10,8 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "perillaroc",
+  "license": "MIT",
   "dependencies": {
     "d3": "^4.1.1"
   }
