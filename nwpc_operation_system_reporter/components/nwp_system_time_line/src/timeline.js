@@ -4,12 +4,12 @@ var nwpc = (function(){
 
 
 var nwpc = (function(mod){
-    nwpc.timeline = (function(){
-        var wdp = function(){
-            console.log("nwpc.timeline.wdp");
-        };
+    mod.timeline = (function(){
+        function version(){
+            console.log("nwpc.timeline v0.0.1");
+        }
         return {
-            wdp: wdp
+            version: version
         }
     })();
     return mod;
