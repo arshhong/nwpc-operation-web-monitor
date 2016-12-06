@@ -1,0 +1,9 @@
+.nwpc-timeline .axis path,
+.nwpc-timeline .axis line{
+    fill: none;
+    stroke: black;
+}
+
+.nwpc-timeline .tick line{
+    opacity: 0.2;
+}

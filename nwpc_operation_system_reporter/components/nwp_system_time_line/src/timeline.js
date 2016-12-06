@@ -24,6 +24,7 @@ var nwpc = (function(mod){
             }
         };
 
+        // color
         var color_domain = [
             'unknown',
             'serial', 'serial_op', 'serial_op1',
@@ -77,6 +78,7 @@ var nwpc = (function(mod){
         function drawLegend(node_id) {
             var legend_svg = d3.select(node_id)
                 .append("svg")
+                .classed("nwpc-timeline", true)
                 .attr('width', svg_size.width)
                 .attr('height', 50);
 
@@ -133,6 +135,7 @@ var nwpc = (function(mod){
         function drawTimeLineChart(container_node_id) {
             var svg = d3.select(container_node_id)
                 .append("svg")
+                .classed("nwpc-timeline", true)
                 .attr('width', svg_size.width)
                 .attr('height', svg_size.height);
 
