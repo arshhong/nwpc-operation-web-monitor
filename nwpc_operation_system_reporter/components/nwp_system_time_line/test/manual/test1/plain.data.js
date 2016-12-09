@@ -59,5 +59,67 @@ var data = [
                 "label": ""
             }
         ]
-    }
+    },
+
+    {
+        "name" : "gmf_gsi_v1r5",
+        "run_times" : [
+            {
+                "name" : "00",
+                "start_time" : "02:59:10",
+                "label" : "640",
+                "end_time" : "05:18:42",
+                "class" : "serial_op"
+            },
+            {
+                "class" : "operation",
+                "start_time" : "03:42:51",
+                "end_time" : "04:46:22",
+                "name" : "00",
+                "label" : ""
+            },
+            {
+                "name" : "06",
+                "start_time" : "10:45:51",
+                "label" : "640",
+                "end_time" : "12:42:35",
+                "class" : "serial_op"
+            },
+            {
+                "class" : "operation",
+                "start_time" : "11:25:01",
+                "end_time" : "12:00:19",
+                "name" : "06",
+                "label" : ""
+            },
+            {
+                "name" : "12",
+                "start_time" : "14:59:02",
+                "label" : "640",
+                "end_time" : "16:52:59",
+                "class" : "serial_op"
+            },
+            {
+                "class" : "operation",
+                "start_time" : "15:25:52",
+                "end_time" : "16:23:23",
+                "name" : "12",
+                "label" : ""
+            },
+            {
+                "name" : "18",
+                "start_time" : "22:15:22",
+                "label" : "640",
+                "end_time" : "23:31:02",
+                "class" : "serial_op"
+            },
+            {
+                "class" : "operation",
+                "start_time" : "22:44:33",
+                "end_time" : "23:18:01",
+                "name" : "18",
+                "label" : ""
+            }
+        ]
+    },
 ];
