@@ -42,11 +42,6 @@ var nwpc = (function(mod){
             .domain(color_domain)
             .range(color_range);
 
-
-        function version(){
-            console.log("nwpc.timeline v0.0.1");
-        }
-
         function setSvgSize(s){
             Object.keys(s).forEach(function(key){
                 svg_size[key] = s[key];
@@ -289,7 +284,6 @@ var nwpc = (function(mod){
         }
 
         return {
-            version: version,
             setSvgSize: setSvgSize,
             setChartOption: setChartOption,
             setClassStyle: setClassStyle,
