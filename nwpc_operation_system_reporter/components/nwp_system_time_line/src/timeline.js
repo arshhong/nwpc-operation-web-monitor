@@ -214,7 +214,7 @@ var nwpc = (function(mod){
             // time level: each item in one row.
             var time_level_data = suite_data_enter
                 .selectAll('.time-level-item')
-                .data(function(d){ return d.run_times});
+                .data(function(d){ return d.times});
 
             var time_level_enter = time_level_data
                 .enter()

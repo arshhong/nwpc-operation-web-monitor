@@ -1,7 +1,7 @@
 var data = [
     {
         "name": "gda_gsi_v1r5",
-        "run_times": [
+        "times": [
             {
                 "class": "serial_op",
                 "start_time": "09:00:59",
@@ -63,7 +63,7 @@ var data = [
 
     {
         "name" : "gmf_gsi_v1r5",
-        "run_times" : [
+        "times" : [
             {
                 "name" : "00",
                 "start_time" : "02:59:10",
