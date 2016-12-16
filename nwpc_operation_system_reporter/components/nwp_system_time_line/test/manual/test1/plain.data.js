@@ -1,6 +1,6 @@
 var data = [
     {
-        "name": "gda_gsi_v1r5",
+        "label": "gda_gsi_v1r5",
         "times": [
             {
                 "class": "serial_op",
@@ -13,8 +13,7 @@ var data = [
                 "class": "operation",
                 "start_time": "09:41:21",
                 "end_time": "09:46:10",
-                "name": "00",
-                "label": ""
+                "name": "00"
             },
             {
                 "class": "serial_op",
@@ -27,8 +26,7 @@ var data = [
                 "class": "operation",
                 "start_time": "13:51:50",
                 "end_time": "13:57:15",
-                "name": "06",
-                "label": ""
+                "name": "06"
             },
             {
                 "class": "serial_op",
@@ -41,8 +39,7 @@ var data = [
                 "class": "operation",
                 "start_time": "21:31:39",
                 "end_time": "21:36:23",
-                "name": "12",
-                "label": ""
+                "name": "12"
             },
             {
                 "class": "serial_op",
@@ -55,14 +52,13 @@ var data = [
                 "class": "operation",
                 "start_time": "01:52:46",
                 "end_time": "01:57:51",
-                "name": "18",
-                "label": ""
+                "name": "18"
             }
         ]
     },
 
     {
-        "name" : "gmf_gsi_v1r5",
+        "label" : "gmf_gsi_v1r5",
         "times" : [
             {
                 "name" : "00",
@@ -75,8 +71,7 @@ var data = [
                 "class" : "operation",
                 "start_time" : "03:42:51",
                 "end_time" : "04:46:22",
-                "name" : "00",
-                "label" : ""
+                "name" : "00"
             },
             {
                 "name" : "06",
@@ -89,8 +84,7 @@ var data = [
                 "class" : "operation",
                 "start_time" : "11:25:01",
                 "end_time" : "12:00:19",
-                "name" : "06",
-                "label" : ""
+                "name" : "06"
             },
             {
                 "name" : "12",
@@ -103,8 +97,7 @@ var data = [
                 "class" : "operation",
                 "start_time" : "15:25:52",
                 "end_time" : "16:23:23",
-                "name" : "12",
-                "label" : ""
+                "name" : "12"
             },
             {
                 "name" : "18",
@@ -117,8 +110,7 @@ var data = [
                 "class" : "operation",
                 "start_time" : "22:44:33",
                 "end_time" : "23:18:01",
-                "name" : "18",
-                "label" : ""
+                "name" : "18"
             }
         ]
     },

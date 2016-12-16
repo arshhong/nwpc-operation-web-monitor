@@ -122,7 +122,7 @@ function drawTimeLineChart(container_node_id) {
     var x_axis = d3.axisTop(x_scale)
         .ticks(d3.timeHour.every(1))
         .tickFormat(d3.timeFormat("%H"))
-        .tickSizeInner( -(system_run_time_data.length * chart_option.suite.interval - chart_option.suite.interval/2) );
+        .tickSizeInner( -(system_run_time_data.length * chart_option.row.interval - chart_option.row.interval/2) );
 
     var axis_group = svg.append("g")
         .attr('transform', 'translate('+ chart_option.start_point.x +','+ chart_option.start_point.y + ')')
@@ -132,7 +132,7 @@ function drawTimeLineChart(container_node_id) {
     // y scale: each system as a row
     var y_scale = d3.scaleLinear()
         .domain([0, system_run_time_data.length-1])
-        .range([chart_option.suite.interval/2, (system_run_time_data.length-1)*chart_option.suite.interval + chart_option.suite.interval/2]);
+        .range([chart_option.row.interval/2, (system_run_time_data.length-1)*chart_option.row.interval + chart_option.row.interval/2]);
 
     // y axis
     var y_axis = d3.axisLeft(y_scale)
@@ -145,31 +145,31 @@ function drawTimeLineChart(container_node_id) {
         .classed('axis', true)
         .call(y_axis);
 
-    // time bar: row, one row per suite
+    // time bar: row, one row per row
     var time_bar_group = svg.append("g")
         .attr('transform', 'translate('+ chart_option.start_point.x +','+ chart_option.start_point.y + ')');
 
 
-    // suite: one row in chart
-    var suite_data = time_bar_group.selectAll('.suite')
+    // row: one row in chart
+    var suite_data = time_bar_group.selectAll('.row')
         .data(system_run_time_data);
 
     var suite_data_enter = suite_data
         .enter()
         .append('g')
         .attr('transform', function(d, i){
-            return 'translate(0, '+ (chart_option.suite.interval*i) +')'
+            return 'translate(0, '+ (chart_option.row.interval*i) +')'
         })
-        .classed('suite', true);
+        .classed('row', true);
 
-    // suite label: row label
+    // row label: row label
     var suite_label = suite_data_enter
         .append('text')
         .attr('x', function(d,i){
             return -10
         })
         .attr('y', function(d,i){
-            return chart_option.suite.interval/2;
+            return chart_option.row.interval/2;
         })
         .text(function(d,i){
             return d.name;
@@ -199,7 +199,7 @@ function drawTimeLineChart(container_node_id) {
             return x_scale(current_start_time);
         })
         .attr('y', function(d, i){
-            return (chart_option.suite.interval - chart_option.suite.bar_height)/2;
+            return (chart_option.row.interval - chart_option.row.bar_height)/2;
         })
         .attr('width', function(d,i){
             var local_start_time = d.start_time;
@@ -223,7 +223,7 @@ function drawTimeLineChart(container_node_id) {
 
             return bar_width>=5?bar_width:5;
         })
-        .attr('height', chart_option.suite.bar_height)
+        .attr('height', chart_option.row.bar_height)
         //.style('stroke-width', '1px')
         //.style('stroke', 'black');
         .style('fill', function(d,i){
@@ -245,7 +245,7 @@ function drawTimeLineChart(container_node_id) {
             return x_scale(current_end_time) + 2;
         })
         .attr('y', function(d, i){
-            return chart_option.suite.interval/2;
+            return chart_option.row.interval/2;
         })
         .text(function(d, i){
             return d.label;
@@ -279,7 +279,7 @@ function drawTimeLineChart(container_node_id) {
             return x_scale(current_start_time);
         })
         .attr('y', function(d, i){
-            return (chart_option.suite.interval - chart_option.suite.bar_height)/2;
+            return (chart_option.row.interval - chart_option.row.bar_height)/2;
         })
         .attr('width', function(d,i){
             var local_start_time = d.start_time;
@@ -303,7 +303,7 @@ function drawTimeLineChart(container_node_id) {
 
             return bar_width>=5?bar_width:5;
         })
-        .attr('height', chart_option.suite.bar_height)
+        .attr('height', chart_option.row.bar_height)
         //.style('stroke-width', '1px')
         //.style('stroke', 'black');
         .style('fill', function(d,i){

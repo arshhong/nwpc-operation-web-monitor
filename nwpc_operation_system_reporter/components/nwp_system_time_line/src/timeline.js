@@ -18,7 +18,7 @@ var nwpc = (function(mod){
                 'x': 250,
                 'y': 30
             },
-            'suite': {
+            "row": {
                 'interval': 30,
                 'bar_height': 20
             }
@@ -142,11 +142,11 @@ var nwpc = (function(mod){
             // x scale: [0,24) hour
             var current_time = new Date();
             var start_hour = d3.timeDay(current_time);
-            console.log(start_hour);
+            // console.log(start_hour);
 
             var next_date = d3.timeDay.offset(start_hour, 1);
             var end_hour = d3.timeHour.offset(next_date, 0);
-            console.log(end_hour);
+            // console.log(end_hour);
 
             var x_scale = d3.scaleTime()
                 .domain([start_hour, end_hour])
@@ -156,17 +156,17 @@ var nwpc = (function(mod){
             var x_axis = d3.axisTop(x_scale)
                 .ticks(d3.timeHour.every(1))
                 .tickFormat(d3.timeFormat("%H"))
-                .tickSizeInner( -(system_run_time_data.length * chart_option.suite.interval - chart_option.suite.interval/2) );
+                .tickSizeInner( -(system_run_time_data.length * chart_option.row.interval - chart_option.row.interval/2) );
 
             var axis_group = svg.append("g")
                 .attr('transform', 'translate('+ chart_option.start_point.x +','+ chart_option.start_point.y + ')')
                 .classed('axis', true)
                 .call(x_axis);
 
-            // y scale: each system as a row
+            // y scale
             var y_scale = d3.scaleLinear()
                 .domain([0, system_run_time_data.length-1])
-                .range([chart_option.suite.interval/2, (system_run_time_data.length-1)*chart_option.suite.interval + chart_option.suite.interval/2]);
+                .range([chart_option.row.interval/2, (system_run_time_data.length-1)*chart_option.row.interval + chart_option.row.interval/2]);
 
             // y axis
             var y_axis = d3.axisLeft(y_scale)
@@ -179,50 +179,50 @@ var nwpc = (function(mod){
                 .classed('axis', true)
                 .call(y_axis);
 
-            // time bar: row, one row per suite
+            // time bar: row, one row per row
             var time_bar_group = svg.append("g")
                 .attr('transform', 'translate('+ chart_option.start_point.x +','+ chart_option.start_point.y + ')');
 
 
-            // suite: one row in chart
-            var suite_data = time_bar_group.selectAll('.suite')
+            // row
+            var row_data = time_bar_group.selectAll('.row')
                 .data(system_run_time_data);
 
-            var suite_data_enter = suite_data
+            var row_data_enter = row_data
                 .enter()
                 .append('g')
                 .attr('transform', function(d, i){
-                    return 'translate(0, '+ (chart_option.suite.interval*i) +')'
+                    return 'translate(0, '+ (chart_option.row.interval*i) +')'
                 })
-                .classed('suite', true);
+                .classed('row', true);
 
-            // suite label: row label
-            var suite_label = suite_data_enter
+            // row label
+            var row_label = row_data_enter
                 .append('text')
                 .attr('x', function(d,i){
                     return -10
                 })
                 .attr('y', function(d,i){
-                    return chart_option.suite.interval/2;
+                    return chart_option.row.interval/2;
                 })
                 .text(function(d,i){
-                    return d.name;
+                    return d.label;
                 })
                 .attr('text-anchor', 'end')
                 .attr("dominant-baseline", "central");
 
-            // time level: each item in one row.
-            var time_level_data = suite_data_enter
-                .selectAll('.time-level-item')
+            // time item
+            var time_item_data = row_data_enter
+                .selectAll('.time-item-item')
                 .data(function(d){ return d.times});
 
-            var time_level_enter = time_level_data
+            var time_item_enter = time_item_data
                 .enter()
                 .append("g")
-                .classed('time-level-item', true);
+                .classed('time-item-item', true);
 
             // time level rect
-            time_level_enter
+            time_item_enter
                 .append('rect')
                 .attr('x', function(d, i){
                     var local_start_time = d.start_time;
@@ -233,7 +233,7 @@ var nwpc = (function(mod){
                     return x_scale(current_start_time);
                 })
                 .attr('y', function(d, i){
-                    return (chart_option.suite.interval - chart_option.suite.bar_height)/2;
+                    return (chart_option.row.interval - chart_option.row.bar_height)/2;
                 })
                 .attr('width', function(d,i){
                     var local_start_time = d.start_time;
@@ -257,9 +257,7 @@ var nwpc = (function(mod){
 
                     return bar_width>=5?bar_width:5;
                 })
-                .attr('height', chart_option.suite.bar_height)
-                //.style('stroke-width', '1px')
-                //.style('stroke', 'black');
+                .attr('height', chart_option.row.bar_height)
                 .style('fill', function(d,i){
                     if (! 'class' in d) {
                         d.class = 'unknown';
@@ -267,9 +265,11 @@ var nwpc = (function(mod){
                     return color_scale(d.class)
                 });
 
-            // time level text
-            time_level_enter
-                .filter(function(d,i){ return d.label != '' })
+            // time item label
+            time_item_enter
+                .filter(function(d,i){
+                    return d.hasOwnProperty('label') && d.label != '';
+                })
                 .append('text')
                 .attr('x', function(d, i){
                     var local_end_time = d.end_time;
@@ -279,7 +279,7 @@ var nwpc = (function(mod){
                     return x_scale(current_end_time) + 2;
                 })
                 .attr('y', function(d, i){
-                    return chart_option.suite.interval/2;
+                    return chart_option.row.interval/2;
                 })
                 .text(function(d, i){
                     return d.label;
