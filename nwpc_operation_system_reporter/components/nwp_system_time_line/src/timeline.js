@@ -5,6 +5,7 @@ var nwpc = (function(){
 
 var nwpc = (function(mod){
     mod.timeline = (function(){
+        var class_name = "nwpc-timeline";
 
         var system_run_time_data = null;
 
@@ -73,7 +74,7 @@ var nwpc = (function(mod){
         function drawLegend(node_id) {
             var legend_svg = d3.select(node_id)
                 .append("svg")
-                .classed("nwpc-timeline", true)
+                .classed(class_name, true)
                 .attr('width', svg_size.width)
                 .attr('height', 50);
 
@@ -130,7 +131,7 @@ var nwpc = (function(mod){
         function drawTimeLineChart(container_node_id) {
             var svg = d3.select(container_node_id)
                 .append("svg")
-                .classed("nwpc-timeline", true)
+                .classed(class_name, true)
                 .attr('width', svg_size.width)
                 .attr('height', svg_size.height);
 
