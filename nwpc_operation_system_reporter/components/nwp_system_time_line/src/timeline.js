@@ -71,15 +71,46 @@ var nwpc = (function(mod){
             system_run_time_data = data;
         }
 
-        function drawLegend(node_id) {
+        var legend_option = {
+            data: {
+                label: {
+                    text: '队列名称'
+                },
+                info:{
+                    text: '图中数字为并行队列使用的CPU核心数'
+                }
+            },
+            options: {
+                size: {
+                    height: 50,
+                    width: svg_size.width
+                },
+                start_point: {
+                    x: chart_option.start_point.x
+                }
+            }
+        };
+
+        function drawLegend(node_id, user_option) {
+            if(user_option.hasOwnProperty('options')){
+                Object.keys(user_option.options).forEach(function(key) {
+                    legend_option.options[key] = user_option.options[key];
+                });
+            }
+            if(user_option.hasOwnProperty('data')){
+                Object.keys(user_option.data).forEach(function(key) {
+                    legend_option.data[key] = user_option.data[key];
+                });
+            }
+
             var legend_svg = d3.select(node_id)
                 .append("svg")
                 .classed(class_name, true)
-                .attr('width', svg_size.width)
-                .attr('height', 50);
+                .attr('width', legend_option.options.size.width)
+                .attr('height', legend_option.options.size.height);
 
             var legend_bar = legend_svg.append('g')
-                .attr('transform', 'translate('+ chart_option.start_point.x +',0)');
+                .attr('transform', 'translate('+ legend_option.options.start_point.x +',0)');
 
             var legend_enter = legend_bar.selectAll('.legend-item')
                 .data(color_domain)
@@ -117,7 +148,7 @@ var nwpc = (function(mod){
                 .attr('y', 15)
                 .attr("dominant-baseline", "central")
                 .attr("text-anchor", "end")
-                .text("队列名称");
+                .text(legend_option.data.label.text);
 
 
             legend_bar.append('text')
@@ -125,7 +156,7 @@ var nwpc = (function(mod){
                 .attr('y', 40)
                 .attr("dominant-baseline", "central")
                 .attr("text-anchor", "start")
-                .text("图中数字为并行队列使用的CPU核心数");
+                .text(legend_option.data.info.text);
         }
 
         function drawTimeLineChart(container_node_id) {

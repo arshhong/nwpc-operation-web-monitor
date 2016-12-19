@@ -17,5 +17,5 @@ nwpc.timeline.setClassStyle([
     {class_name:'normal',  color: '#cb181d'},
     {class_name:'largemem', color: '#67000d'}
 ]);
-nwpc.timeline.drawLegend("#time-line-container-legend");
+nwpc.timeline.drawLegend("#time-line-container-legend", {});
 nwpc.timeline.drawTimeLineChart("#time-line-container");
