@@ -10,7 +10,7 @@ let class_styles = [
     {class_name:'largemem', color: '#67000d'}
 ];
 
-var my_timeline = new nwpc.timeline.TimeLine("#time-line-container",{
+var my_timeline = new nwpc.timeline.TimeLine(document.getElementById("time-line-container"),{
     type: 'timeline',
     data: {
         class_styles: class_styles,

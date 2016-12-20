@@ -9,7 +9,10 @@ var nwpc = (function(mod){
 
         /**
          * 时间线
-         * @param context HTML标签id
+         * @param context 绘制图形的容器，可以是 d3.select 支持的任意类型，例如：
+         *      "#time-line-container"
+         *      document.getElementById("time-line-container")
+         *
          * @param config 选项
          *      {
          *          type: 'timeline',
