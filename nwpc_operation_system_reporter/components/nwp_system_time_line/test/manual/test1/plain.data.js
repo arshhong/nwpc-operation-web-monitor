@@ -56,7 +56,6 @@ var data = [
             }
         ]
     },
-
     {
         "label" : "gmf_gsi_v1r5",
         "times" : [

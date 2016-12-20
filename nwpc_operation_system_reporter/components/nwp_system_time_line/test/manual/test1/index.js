@@ -1,12 +1,4 @@
-console.log(nwpc);
-
-var svg_size = {
-    'width': 1400
-};
-
-nwpc.timeline.setSvgSize(svg_size);
-nwpc.timeline.setSystemRunTimeData(data);
-nwpc.timeline.setClassStyle([
+let class_styles = [
     {class_name:'unknown', color: '#bdbdbd'},
     {class_name:'serial',  color: '#4575b4'},
     {class_name:'serial_op',  color: '#74add1'},
@@ -16,6 +8,23 @@ nwpc.timeline.setClassStyle([
     {class_name:'operation2',  color: '#feb24c'},
     {class_name:'normal',  color: '#cb181d'},
     {class_name:'largemem', color: '#67000d'}
-]);
-nwpc.timeline.drawLegend("#time-line-container-legend", {});
-nwpc.timeline.drawTimeLineChart("#time-line-container");
+];
+
+var my_timeline = new nwpc.timeline.TimeLine("#time-line-container",{
+    type: 'timeline',
+    data: {
+        class_styles: class_styles,
+        data: data
+    },
+    options: {
+        size: {
+            'width': 1400
+        }
+    }
+});
+
+var my_timeline_legend = new nwpc.timeline.TimeLineLegend("#time-line-container-legend", {
+    data: {
+        class_styles: class_styles
+    }
+});
