@@ -8,7 +8,7 @@ var nwpc = (function(mod){
         let class_name = "nwpc-timeline";
 
         /**
-         *
+         * 时间线
          * @param context HTML标签id
          * @param config 选项
          *      {
@@ -18,7 +18,6 @@ var nwpc = (function(mod){
          *              ],
          *              data:[
          *                  {class_name:'unknown', color: '#bdbdbd'},
-         *                  {class_name:'serial',  color: '#4575b4'},
          *              ]
          *          },
          *          options: {
@@ -100,10 +99,6 @@ var nwpc = (function(mod){
 
         TimeLine.prototype = {
             constructor: TimeLine,
-            version: function(){
-                console.log("TimeLine V0.1.0");
-                console.log(this.config);
-            },
             drawTimeLineChart: function(context, config) {
                 let options = config.options;
                 let data = config.data;
@@ -267,15 +262,7 @@ var nwpc = (function(mod){
             type: 'timeline',
             data: {
                 class_styles: [
-                    {class_name:'unknown', color: '#bdbdbd'},
-                    {class_name:'serial',  color: '#4575b4'},
-                    {class_name:'serial_op',  color: '#74add1'},
-                    {class_name:'serial_op1', color: '#deebf7'},
-                    {class_name:'operation', color: '#cc4c02'},
-                    {class_name:'operation1',  color: '#f46d43'},
-                    {class_name:'operation2',  color: '#feb24c'},
-                    {class_name:'normal',  color: '#cb181d'},
-                    {class_name:'largemem', color: '#67000d'}
+                    {class_name:'unknown', color: '#bdbdbd'}
                 ]
             },
             options: {
@@ -294,6 +281,32 @@ var nwpc = (function(mod){
             }
         };
 
+        /**
+         * 时间线图示
+         * @param context
+         * @param config
+         *      data: {
+         *          label: {
+         *              text: '队列名称'
+         *          },
+         *          info:{
+         *              text: '图中数字为并行队列使用的CPU核心数'
+         *          },
+         *          class_styles: [
+         *              {class_name:'unknown', color: '#bdbdbd'},
+         *          ]
+         *      },
+         *      options: {
+         *          size: {
+         *              height: 50,
+         *              width: 1800
+         *          },
+         *          start_point: {
+         *              x: 250
+         *          }
+         *      }
+         * @constructor
+         */
         function TimeLineLegend(context, config){
             this.context = context;
             this.config = {};
@@ -422,7 +435,6 @@ var nwpc = (function(mod){
                     .attr("text-anchor", "start")
                     .text(data.info.text);
             }
-
         };
 
         TimeLineLegend.default = {
@@ -433,7 +445,9 @@ var nwpc = (function(mod){
                 info:{
                     text: '图中数字为并行队列使用的CPU核心数'
                 },
-                class_styles: []
+                class_styles: [
+                    {class_name:'unknown', color: '#bdbdbd'}
+                ]
             },
             options: {
                 size: {
