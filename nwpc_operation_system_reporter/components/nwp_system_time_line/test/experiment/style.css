@@ -1,9 +1,0 @@
-.axis path,
-.axis line{
-    fill: none;
-    stroke: black;
-}
-
-.tick line{
-    opacity: 0.2;
-}
