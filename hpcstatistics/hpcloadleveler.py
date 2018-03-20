@@ -61,8 +61,8 @@ def get_llq(hostname, port, username, password, query_user=None):
         ssh_connection = paramiko.SSHClient()
         ssh_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh_connection.connect(hostname, port, username, password)
-    except paramiko.SSHException, e:
-        print e
+    except paramiko.SSHException as e:
+        print (e)
         return {
             'error': 'ssh-connection-error'
         }
@@ -74,7 +74,7 @@ def get_job_detail_info_by_ssh(ssh_connection, query_user=None):
     llq_result = get_llq_by_ssh(ssh_connection, query_user)
 
     for job_item in llq_result['jobs']:
-        print 'get information for', job_item['id']
+        print ('get information for', job_item['id'])
         bin_path = 'llq'
         bin_param = '-l {id}'.format(id=job_item['id'])
         ssh_command = bin_path + ' ' + bin_param
@@ -112,8 +112,8 @@ def get_job_detail_info(hostname, port, username, password, query_user=None):
         ssh_connection = paramiko.SSHClient()
         ssh_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh_connection.connect(hostname, port, username, password)
-    except paramiko.SSHException, e:
-        print e
+    except paramiko.SSHException as e:
+        print (e)
         return {
             'error': 'ssh-connection-error'
         }
@@ -131,6 +131,6 @@ if __name__ == "__main__":
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, port, username, password)
         llq_info = get_job_detail_info_by_ssh(ssh, 'nwp_qu')
-        print llq_info
-    except paramiko.SSHException, e:
-        print e
+        print (llq_info)
+    except paramiko.SSHException as  e:
+        print (e)

@@ -8,7 +8,7 @@ from nwpc_operation_monitor_broker.api import api_app
 def get_hpc_llq_info():
     r = request
     hpc_llq_info_message = json.loads(request.form['message'])
-    print "Receive llq info:", hpc_llq_info_message
+    print ("Receive llq info:", hpc_llq_info_message)
     socketio.emit('send_llq_info', hpc_llq_info_message, namespace='/hpc')
     result = {
         'status': 'ok'

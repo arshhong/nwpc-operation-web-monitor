@@ -12,8 +12,8 @@ def get_cmquota_by_user(hostname,port,username,password):
         ssh.connect(hostname, port, username, password)
         ssh_command = bin_path + ' ' + bin_param
         stdin, stdout, stderr = ssh.exec_command(ssh_command)
-    except paramiko.SSHException, e:
-        print e
+    except paramiko.SSHException as e:
+        print (e)
         return {
             'error': 'error',
             'error_msg': str(e)
@@ -68,4 +68,4 @@ if __name__ == "__main__":
     username = 'wangdp'
     password = 'perilla'
 
-    print get_cmquota_by_user(hostname,port,username,password)
+    print (get_cmquota_by_user(hostname,port,username,password))

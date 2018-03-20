@@ -7,5 +7,4 @@ redis_client = redis.Redis(host=REDIS_HOST)
 
 api_app = Blueprint('api_app', __name__, template_folder='template')
 
-import api_loadleveler
-import api_sms
+from nwpc_operation_monitor_broker.api import api_loadleveler,api_sms

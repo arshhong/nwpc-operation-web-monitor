@@ -14,7 +14,7 @@ WARING_POST_URL = 'https://oapi.dingtalk.com/message/send?access_token={dingtalk
 def get_sms_info():
     r = request
     hpc_sms_info_message = json.loads(request.form['message'])
-    print "Receive sms info"
+    print ("Receive sms info")
     socketio.emit('send_sms_info', hpc_sms_info_message, namespace='/hpc')
     result = {
         'status': 'ok'
@@ -44,7 +44,7 @@ def get_sms_status():
 
     # 检测是否需要推送警告信息
     key = "hpc/sms/{sms_user}/{sms_name}/status".format(sms_user=sms_user, sms_name=sms_name)
-    print key
+    print (key)
     # 获取服务器'/' 的状态
     if len(message_data["status"]) >0:
         server_status = message_data["status"][0] # TODO：使用循环查找
@@ -55,7 +55,7 @@ def get_sms_status():
                 previous_server_status = cached_message['status'][0]
                 if previous_server_status['status'] != 'abo':
                     # 发送推送警告
-                    print 'Get aborted. Pushing warning message...'
+                    print ('Get aborted. Pushing warning message...')
 
                     # 获取 access token
                     access_token_key = "dingtalk_access_token"
@@ -112,7 +112,7 @@ def get_sms_status():
                                            data=warning_post_data,
                                            verify=False,
                                            headers=warning_post_headers)
-                    print result.json()
+                    print (result.json())
 
     # 保存到本地缓存
     redis_client.set(key, json.dumps(message_data))
@@ -140,7 +140,7 @@ def get_dingtalk_access_token():
     )
     token_response = requests.get(url,verify=False, headers=headers)
     response_json = token_response.json()
-    print response_json
+    print (response_json)
     if response_json['errcode'] == 0:
         # 更新 token
         access_token = response_json['access_token']

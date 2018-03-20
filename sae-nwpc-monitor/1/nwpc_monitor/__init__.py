@@ -37,7 +37,7 @@ def get_sms_status_for_server_list(sms_server_list):
 
         sms_status_data.append(value)
 
-    print sms_status_data
+    print (sms_status_data)
 
     return render_template('sms_status.html', current_time=current_time, sms_status_data=sms_status_data)
 

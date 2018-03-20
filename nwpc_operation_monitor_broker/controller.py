@@ -49,7 +49,7 @@ def hpc_llq_detail_info(message_string):
 
 @socketio.on('user_disk_usage', namespace='/hpc')
 def hpc_user_disk_usage(message_string):
-    print 'hpc_user_disk_usage'
+    print ('hpc_user_disk_usage')
     message = message_string
     query_user = message['data']['query_user']
     query_password = message['data']['query_password']
